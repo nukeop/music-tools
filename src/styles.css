@@ -1,1 +1,72 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #ffecd6;
+  --background-fg: #2b1b26;
+  --background-fg-muted: #5e4a58;
+  --panel: #ffd4a3;
+  --panel-fg: #2b1b26;
+  --panel-fg-muted: #5e4a58;
+  --overlay: #f4bd81;
+  --overlay-fg: #2b1b26;
+  --overlay-fg-muted: #5e4a58;
+  --border: #8d697a;
+  --primary: #d08159;
+  --primary-fg: #2b1b26;
+  --secondary: #845f71;
+  --secondary-fg: #ffecd6;
+  --accent: #00736a;
+  --accent-fg: #ffecd6;
+  --positive: #2b7440;
+  --positive-fg: #ffecd6;
+  --negative: #b94642;
+  --negative-fg: #ffecd6;
+}
+
+.dark {
+  --background: #2b1b26;
+  --background-fg: #ffecd6;
+  --background-fg-muted: #ffd4a3;
+  --panel: #3f2b38;
+  --panel-fg: #ffecd6;
+  --panel-fg-muted: #ffd4a3;
+  --overlay: #533d4b;
+  --overlay-fg: #ffecd6;
+  --overlay-fg-muted: #ffd4a3;
+  --border: #5e4a58;
+  --primary: #ffaa5e;
+  --primary-fg: #2b1b26;
+  --secondary: #c296ab;
+  --secondary-fg: #2b1b26;
+  --accent: #68c4b8;
+  --accent-fg: #2b1b26;
+  --positive: #76c788;
+  --positive-fg: #2b1b26;
+  --negative: #f47b74;
+  --negative-fg: #2b1b26;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-background-fg: var(--background-fg);
+  --color-background-fg-muted: var(--background-fg-muted);
+  --color-panel: var(--panel);
+  --color-panel-fg: var(--panel-fg);
+  --color-panel-fg-muted: var(--panel-fg-muted);
+  --color-overlay: var(--overlay);
+  --color-overlay-fg: var(--overlay-fg);
+  --color-overlay-fg-muted: var(--overlay-fg-muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-fg: var(--primary-fg);
+  --color-secondary: var(--secondary);
+  --color-secondary-fg: var(--secondary-fg);
+  --color-accent: var(--accent);
+  --color-accent-fg: var(--accent-fg);
+  --color-positive: var(--positive);
+  --color-positive-fg: var(--positive-fg);
+  --color-negative: var(--negative);
+  --color-negative-fg: var(--negative-fg);
+}
