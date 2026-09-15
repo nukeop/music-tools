@@ -5,6 +5,25 @@
   "type": "module",
   "author": "nukeop",
   "license": "AGPL-3.0",
-  "scripts": {},
-  "packageManager": "bun@1.4.0"
+  "scripts": {
+    "dev": "bun index.html",
+    "build": "bun run build.ts",
+    "check": "biome check .",
+    "check:fix": "biome check --write .",
+    "type-check": "tsc"
+  },
+  "packageManager": "bun@1.4.0",
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "tailwindcss": "^4.3.3"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.5.12",
+    "@types/bun": "^1.4.2",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.7",
+    "bun-plugin-tailwind": "^0.1.2",
+    "typescript": "^7.0.2"
+  }
 }
