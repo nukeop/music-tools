@@ -19,7 +19,10 @@
       "react": "recommended"
     },
     "rules": {
-      "preset": "recommended"
+      "preset": "recommended",
+      "style": {
+        "noNonNullAssertion": "off"
+      }
     }
   },
   "javascript": {
