@@ -1,0 +1,10 @@
+{
+  "name": "music-tools",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "author": "nukeop",
+  "license": "AGPL-3.0",
+  "scripts": {},
+  "packageManager": "bun@1.4.0"
+}
