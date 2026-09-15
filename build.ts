@@ -9,6 +9,7 @@ await Bun.build({
   target: 'browser',
   minify: true,
   sourcemap: 'linked',
+  splitting: true,
   define: { 'process.env.NODE_ENV': JSON.stringify('production') },
   plugins: [tailwind],
 });
