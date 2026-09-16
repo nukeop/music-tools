@@ -18,7 +18,6 @@ export function InstrumentKeySwitch() {
       segments={SEGMENTS}
       selected={instrumentKey}
       onSelect={setInstrumentKey}
-      className=""
       segmentClassName="h-8 w-9 text-sm"
     />
   );

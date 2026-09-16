@@ -1,25 +1,25 @@
-export type ChoiceOption = {
-  value: string;
+export type ChoiceOption<T extends string> = {
+  value: T;
   label: string;
 };
 
-export type Tone = 'neutral' | 'primary' | 'positive' | 'negative';
+type Variant = 'neutral' | 'primary' | 'positive' | 'negative';
 
-type ChoiceGroupProps = {
+type ChoiceGroupProps<T extends string> = {
   groupLabel: string;
-  options: ChoiceOption[];
-  selected: string | null;
-  onChange: (value: string) => void;
-  className: string;
-  tone: Tone;
+  options: ChoiceOption<T>[];
+  selected: T | null;
+  onChange: (value: T) => void;
+  className?: string;
+  variant: Variant;
 };
 
-type ToneClassNames = {
+type VariantClassNames = {
   idle: string;
   selected: string;
 };
 
-const TONE_CLASS_NAMES: Record<Tone, ToneClassNames> = {
+const VARIANT_CLASS_NAMES: Record<Variant, VariantClassNames> = {
   neutral: {
     idle: 'bg-overlay text-overlay-fg hover:bg-overlay/70',
     selected: 'bg-primary text-primary-fg',
@@ -38,29 +38,29 @@ const TONE_CLASS_NAMES: Record<Tone, ToneClassNames> = {
   },
 };
 
-function optionClassName(tone: Tone, isSelected: boolean): string {
+function variantClassName(variant: Variant, isSelected: boolean): string {
   const base =
     'flex h-9 items-center justify-center rounded-lg text-xs font-semibold transition-colors sm:text-sm';
 
   if (isSelected) {
-    return `${base} ${TONE_CLASS_NAMES[tone].selected}`;
+    return `${base} ${VARIANT_CLASS_NAMES[variant].selected}`;
   }
 
-  return `${base} ${TONE_CLASS_NAMES[tone].idle}`;
+  return `${base} ${VARIANT_CLASS_NAMES[variant].idle}`;
 }
 
-export function ChoiceGroup({
+export function ChoiceGroup<T extends string>({
   groupLabel,
   options,
   selected,
   onChange,
   className,
-  tone,
-}: ChoiceGroupProps) {
+  variant,
+}: ChoiceGroupProps<T>) {
   return (
     <fieldset
       aria-label={groupLabel}
-      className={`m-0 border-0 p-0 ${className}`}
+      className={`m-0 border-0 p-0 ${className ?? ''}`}
     >
       {options.map((option) => (
         <button
@@ -68,7 +68,7 @@ export function ChoiceGroup({
           type="button"
           aria-pressed={option.value === selected}
           onClick={() => onChange(option.value)}
-          className={optionClassName(tone, option.value === selected)}
+          className={variantClassName(variant, option.value === selected)}
         >
           {option.label}
         </button>

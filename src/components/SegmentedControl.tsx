@@ -9,11 +9,11 @@ type SegmentedControlProps<T extends string> = {
   segments: Segment<T>[];
   selected: T;
   onSelect: (value: T) => void;
-  className: string;
+  className?: string;
   segmentClassName: string;
 };
 
-function toneClassName(isSelected: boolean): string {
+function variantClassName(isSelected: boolean): string {
   if (isSelected) {
     return 'bg-primary text-primary-fg';
   }
@@ -31,7 +31,7 @@ export function SegmentedControl<T extends string>({
   return (
     <fieldset
       aria-label={groupLabel}
-      className={`m-0 flex overflow-hidden rounded-lg border-0 p-0 ${className}`}
+      className={`m-0 flex overflow-hidden rounded-lg border-0 p-0 ${className ?? ''}`}
     >
       {segments.map((segment) => (
         <button
@@ -40,7 +40,7 @@ export function SegmentedControl<T extends string>({
           aria-label={segment.ariaLabel}
           aria-pressed={segment.value === selected}
           onClick={() => onSelect(segment.value)}
-          className={`${segmentClassName} font-semibold transition-colors ${toneClassName(segment.value === selected)}`}
+          className={`${segmentClassName} font-semibold transition-colors ${variantClassName(segment.value === selected)}`}
         >
           {segment.label}
         </button>

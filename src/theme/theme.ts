@@ -3,8 +3,8 @@ export type Theme = 'light' | 'dark';
 const storageKey = 'theme';
 
 export function readInitialTheme(): Theme {
-  const stored = localStorage.getItem(storageKey) as Theme | null;
-  if (stored) {
+  const stored = localStorage.getItem(storageKey);
+  if (stored === 'light' || stored === 'dark') {
     return stored;
   }
   if (matchMedia('(prefers-color-scheme: dark)').matches) {

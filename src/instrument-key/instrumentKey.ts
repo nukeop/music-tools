@@ -16,8 +16,8 @@ export function toConcertPitch(notes: string[], key: InstrumentKey): string[] {
 const storageKey = 'instrumentKey';
 
 export function readInitialInstrumentKey(): InstrumentKey {
-  const stored = localStorage.getItem(storageKey) as InstrumentKey | null;
-  if (stored) {
+  const stored = localStorage.getItem(storageKey);
+  if (stored === 'Bb' || stored === 'Eb') {
     return stored;
   }
   return 'C';

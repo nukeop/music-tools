@@ -23,42 +23,30 @@ let fakeInstrument: ReturnType<typeof createFakeInstrument>;
 
 type SlotPosition = 1 | 2 | 3 | 4 | 5;
 
-function choiceGroup(groupLabel: string) {
-  return {
-    selected() {
-      const group = screen.getByRole('group', { name: groupLabel });
-      const pressedButtons = within(group).getAllByRole('button', {
-        pressed: true,
-      });
-      if (pressedButtons.length === 0) {
-        return null;
-      }
-      return pressedButtons[0].textContent!;
-    },
-
-    async select(label: string) {
-      const group = screen.getByRole('group', { name: groupLabel });
-      await user.click(within(group).getByRole('button', { name: label }));
-    },
-  };
+function textContentOf(button: HTMLElement): string {
+  return button.textContent!;
 }
 
-function segmentedControl(groupLabel: string) {
+function ariaLabelOf(button: HTMLElement): string {
+  return button.getAttribute('aria-label')!;
+}
+
+function group(
+  groupLabel: string,
+  readSelected: (button: HTMLElement) => string,
+) {
   return {
     selected() {
-      const group = screen.getByRole('group', { name: groupLabel });
-      const pressedButtons = within(group).getAllByRole('button', {
+      const groupElement = screen.getByRole('group', { name: groupLabel });
+      const pressedButtons = within(groupElement).getAllByRole('button', {
         pressed: true,
       });
-      if (pressedButtons.length === 0) {
-        return null;
-      }
-      return pressedButtons[0].getAttribute('aria-label')!;
+      return readSelected(pressedButtons[0]);
     },
 
-    async select(ariaLabel: string) {
-      const group = screen.getByRole('group', { name: groupLabel });
-      await user.click(within(group).getByRole('button', { name: ariaLabel }));
+    async select(name: string) {
+      const groupElement = screen.getByRole('group', { name: groupLabel });
+      await user.click(within(groupElement).getByRole('button', { name }));
     },
   };
 }
@@ -103,27 +91,27 @@ export const ChordBuilderWrapper = {
   },
 
   get rootPicker() {
-    return choiceGroup('Root note');
+    return group('Root note', textContentOf);
   },
 
   get triadPicker() {
-    return choiceGroup('Triad');
+    return group('Triad', textContentOf);
   },
 
   get seventhPicker() {
-    return choiceGroup('Seventh');
+    return group('Seventh', textContentOf);
   },
 
   get extensionPicker() {
-    return choiceGroup('Extension');
+    return group('Extension', textContentOf);
   },
 
   get accidentalSwitch() {
-    return segmentedControl('Note spelling');
+    return group('Note spelling', ariaLabelOf);
   },
 
   get instrumentKeySwitch() {
-    return segmentedControl('Instrument key');
+    return group('Instrument key', ariaLabelOf);
   },
 
   get playButton() {

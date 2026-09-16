@@ -9,10 +9,7 @@
     "noEmit": true,
     "skipLibCheck": true,
     "verbatimModuleSyntax": true,
-    "types": ["bun"],
-    "paths": {
-      "@/*": ["./src/*"]
-    }
+    "types": ["bun"]
   },
   "include": ["src", "build.ts", "happydom.ts", "testing-library.ts"]
 }

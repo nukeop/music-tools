@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Note } from 'tonal';
 import { useInstrument } from '../../audio/InstrumentProvider';
+import { ChoiceGroup } from '../../components/ChoiceGroup';
 import { useInstrumentKey } from '../../instrument-key/InstrumentKeyProvider';
 import { toConcertPitch } from '../../instrument-key/instrumentKey';
 import {
@@ -16,27 +17,19 @@ import {
 import { AccidentalSwitch } from './AccidentalSwitch';
 import { ChordName } from './ChordName';
 import { ChordSlots } from './ChordSlots';
-import { ExtensionPicker } from './ExtensionPicker';
+import {
+  EXTENSION_OPTIONS,
+  SEVENTH_OPTIONS,
+  TRIAD_OPTIONS,
+} from './layerOptions';
 import { PlayButton } from './PlayButton';
 import { RootPicker } from './RootPicker';
-import { SeventhPicker } from './SeventhPicker';
-import { TriadPicker } from './TriadPicker';
 
 function toggle<T>(current: T | null, next: T): T | null {
   if (current === next) {
     return null;
   }
   return next;
-}
-
-function deriveSpelledTonic(
-  tonic: string | null,
-  accidental: Accidental,
-): string | null {
-  if (tonic === null) {
-    return null;
-  }
-  return spellTonic(tonic, accidental);
 }
 
 export function ChordBuilder() {
@@ -50,7 +43,7 @@ export function ChordBuilder() {
     extension: null,
   });
 
-  const spelledTonic = deriveSpelledTonic(tonic, accidental);
+  const spelledTonic = spellTonic(tonic, accidental);
   const playDisabled = tonic === null || selection.triad === null;
 
   function play(nextTonic: string | null, nextSelection: ChordSelection) {
@@ -63,6 +56,11 @@ export function ChordBuilder() {
     void instrument.playChord(toConcertPitch(notes, instrumentKey));
   }
 
+  function updateSelection(next: ChordSelection) {
+    setSelection(next);
+    play(spelledTonic, next);
+  }
+
   function selectTonic(nextTonic: string) {
     setTonic(nextTonic);
     if (selection.triad !== null) {
@@ -70,34 +68,28 @@ export function ChordBuilder() {
     }
   }
 
-  function selectTriad(value: string) {
-    const next = { ...selection, triad: value as Triad };
-    setSelection(next);
-    play(spelledTonic, next);
+  function selectTriad(triad: Triad) {
+    updateSelection({ ...selection, triad });
   }
 
-  function selectSeventh(value: string) {
-    const nextSeventh = toggle(selection.seventh, value as Seventh);
+  function selectSeventh(seventh: Seventh) {
+    const nextSeventh = toggle(selection.seventh, seventh);
     let nextExtension = selection.extension;
     if (nextSeventh === null) {
       nextExtension = null;
     }
-    const next: ChordSelection = {
+    updateSelection({
       ...selection,
       seventh: nextSeventh,
       extension: nextExtension,
-    };
-    setSelection(next);
-    play(spelledTonic, next);
+    });
   }
 
-  function selectExtension(value: string) {
-    const next = {
+  function selectExtension(extension: Extension) {
+    updateSelection({
       ...selection,
-      extension: toggle(selection.extension, value as Extension),
-    };
-    setSelection(next);
-    play(spelledTonic, next);
+      extension: toggle(selection.extension, extension),
+    });
   }
 
   return (
@@ -119,16 +111,31 @@ export function ChordBuilder() {
         </div>
 
         <div className="flex flex-col gap-1.5 sm:flex-row sm:gap-3">
-          <TriadPicker selected={selection.triad} onSelect={selectTriad} />
-          <SeventhPicker
+          <ChoiceGroup
+            groupLabel="Triad"
+            options={TRIAD_OPTIONS}
+            selected={selection.triad}
+            onChange={selectTriad}
+            className="grid grid-cols-6 gap-1.5 sm:flex-[6]"
+            variant="primary"
+          />
+          <ChoiceGroup
+            groupLabel="Seventh"
+            options={SEVENTH_OPTIONS}
             selected={selection.seventh}
-            onSelect={selectSeventh}
+            onChange={selectSeventh}
+            className="grid grid-cols-4 gap-1.5 sm:flex-[4]"
+            variant="positive"
           />
         </div>
 
-        <ExtensionPicker
+        <ChoiceGroup
+          groupLabel="Extension"
+          options={EXTENSION_OPTIONS}
           selected={selection.extension}
-          onSelect={selectExtension}
+          onChange={selectExtension}
+          className="grid grid-cols-7 gap-1.5"
+          variant="negative"
         />
       </div>
 

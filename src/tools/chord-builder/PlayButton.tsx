@@ -6,7 +6,7 @@ type PlayButtonProps = {
   onClick: () => void;
 };
 
-function toneClassName(disabled: boolean): string {
+function variantClassName(disabled: boolean): string {
   if (disabled) {
     return 'bg-overlay text-overlay-fg-muted';
   }
@@ -20,7 +20,7 @@ export function PlayButton({ disabled, onClick }: PlayButtonProps) {
       aria-label="Play chord"
       disabled={disabled}
       onClick={onClick}
-      className={`flex h-9 w-9 items-center justify-center rounded-lg ${toneClassName(disabled)}`}
+      className={`flex h-9 w-9 items-center justify-center rounded-lg ${variantClassName(disabled)}`}
     >
       <Icon icon={play} className="size-5" />
     </button>

@@ -1,5 +1,4 @@
 import { Interval, Note } from 'tonal';
-import type { ChoiceOption } from '../components/ChoiceGroup';
 
 export type Accidental = 'flat' | 'sharp';
 
@@ -21,7 +20,7 @@ export type ChordSelection = {
   extension: Extension | null;
 };
 
-type ChordLayer = {
+export type ChordLayer = {
   label: string;
   intervals: string[];
 };
@@ -41,7 +40,7 @@ export const TONICS: string[] = [
   'B',
 ];
 
-const TRIADS: Record<Triad, ChordLayer> = {
+export const TRIADS: Record<Triad, ChordLayer> = {
   major: { label: 'Δ', intervals: ['1P', '3M', '5P'] },
   minor: { label: '-', intervals: ['1P', '3m', '5P'] },
   diminished: { label: '°', intervals: ['1P', '3m', '5d'] },
@@ -50,14 +49,14 @@ const TRIADS: Record<Triad, ChordLayer> = {
   sus4: { label: 'sus4', intervals: ['1P', '4P', '5P'] },
 };
 
-const SEVENTHS: Record<Seventh, ChordLayer> = {
+export const SEVENTHS: Record<Seventh, ChordLayer> = {
   '6': { label: '6', intervals: ['6M'] },
   '7': { label: '7', intervals: ['7m'] },
   maj7: { label: 'Δ7', intervals: ['7M'] },
   dim7: { label: '°7', intervals: ['7d'] },
 };
 
-const EXTENSIONS: Record<Extension, ChordLayer> = {
+export const EXTENSIONS: Record<Extension, ChordLayer> = {
   b9: { label: '♭9', intervals: ['9m'] },
   '9': { label: '9', intervals: ['9M'] },
   '#9': { label: '♯9', intervals: ['9A'] },
@@ -87,19 +86,6 @@ const BASE_SYMBOLS: Record<Triad, Record<Seventh | 'none', string>> = {
     dim7: '(♭♭7)sus4',
   },
 };
-
-function optionsFrom<K extends string>(
-  table: Record<K, ChordLayer>,
-): ChoiceOption[] {
-  return Object.entries<ChordLayer>(table).map(([value, layer]) => ({
-    value,
-    label: layer.label,
-  }));
-}
-
-export const TRIAD_OPTIONS: ChoiceOption[] = optionsFrom(TRIADS);
-export const SEVENTH_OPTIONS: ChoiceOption[] = optionsFrom(SEVENTHS);
-export const EXTENSION_OPTIONS: ChoiceOption[] = optionsFrom(EXTENSIONS);
 
 export function triadIntervals(triad: Triad): string[] {
   return TRIADS[triad].intervals;
@@ -162,7 +148,19 @@ export function chordName(
   return `${root}${base}${extension}`;
 }
 
-export function spellTonic(tonic: string, accidental: Accidental): string {
+export function spellTonic(tonic: string, accidental: Accidental): string;
+export function spellTonic(tonic: null, accidental: Accidental): null;
+export function spellTonic(
+  tonic: string | null,
+  accidental: Accidental,
+): string | null;
+export function spellTonic(
+  tonic: string | null,
+  accidental: Accidental,
+): string | null {
+  if (tonic === null) {
+    return null;
+  }
   if (accidental === 'sharp') {
     return Note.enharmonic(tonic);
   }

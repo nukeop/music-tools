@@ -6,13 +6,14 @@ import {
   type Triad,
   triadIntervals,
 } from '../../theory/chords';
+import { slotTestId } from './slotTestId';
 
 type TriadSlotsProps = {
   tonic: string | null;
   triad: Triad | null;
 };
 
-type SlotTone = {
+type ChordTone = {
   note: string;
   degree: string;
 };
@@ -20,11 +21,11 @@ type SlotTone = {
 const SLOT_COLORS: SlotColor[] = ['primary', 'accent', 'secondary'];
 const ROOT_INTERVAL = '1P';
 
-function toneAt(
+function chordToneAt(
   index: number,
   tonic: string | null,
   triad: Triad | null,
-): SlotTone | undefined {
+): ChordTone | undefined {
   if (tonic === null) {
     return undefined;
   }
@@ -45,11 +46,11 @@ export function TriadSlots({ tonic, triad }: TriadSlotsProps) {
   return (
     <div className="grid flex-[3] grid-cols-3 overflow-hidden rounded-xl">
       {SLOT_COLORS.map((color, index) => {
-        const tone = toneAt(index, tonic, triad);
+        const tone = chordToneAt(index, tonic, triad);
         return (
           <NoteSlot
             key={color}
-            testId={`chord-slot-${index + 1}`}
+            testId={slotTestId(index + 1)}
             color={color}
             rounded={false}
             note={tone?.note}

@@ -4,6 +4,7 @@ import {
   seventhInterval,
 } from '../../theory/chords';
 import { LayerSlot } from './LayerSlot';
+import { slotTestId } from './slotTestId';
 import { TriadSlots } from './TriadSlots';
 
 type ChordSlotsProps = {
@@ -17,7 +18,7 @@ export function ChordSlots({ tonic, selection }: ChordSlotsProps) {
       <TriadSlots tonic={tonic} triad={selection.triad} />
       {selection.seventh !== null && (
         <LayerSlot
-          testId="chord-slot-4"
+          testId={slotTestId(4)}
           tonic={tonic}
           interval={seventhInterval(selection.seventh)}
           color="positive"
@@ -25,7 +26,7 @@ export function ChordSlots({ tonic, selection }: ChordSlotsProps) {
       )}
       {selection.extension !== null && (
         <LayerSlot
-          testId="chord-slot-5"
+          testId={slotTestId(5)}
           tonic={tonic}
           interval={extensionInterval(selection.extension)}
           color="negative"

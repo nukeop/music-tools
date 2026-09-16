@@ -21,7 +21,7 @@ const filledClassName: Record<SlotColor, string> = {
   negative: 'bg-negative text-negative-fg',
 };
 
-function toneClassName(color: SlotColor, hasNote: boolean): string {
+function variantClassName(color: SlotColor, hasNote: boolean): string {
   if (hasNote) {
     return filledClassName[color];
   }
@@ -35,11 +35,25 @@ function placeholderGlyph(hasNote: boolean) {
   return <span className="text-3xl opacity-30">–</span>;
 }
 
-function roundedClassName(rounded: boolean): string {
+function containerClassName(
+  color: SlotColor,
+  hasNote: boolean,
+  rounded: boolean,
+): string {
+  const classes = [
+    'flex',
+    'aspect-square',
+    'w-full',
+    'flex-col',
+    'items-center',
+    'justify-center',
+    'gap-1',
+  ];
   if (rounded) {
-    return 'rounded-xl';
+    classes.push('rounded-xl');
   }
-  return '';
+  classes.push(variantClassName(color, hasNote));
+  return classes.join(' ');
 }
 
 export function NoteSlot({
@@ -54,20 +68,20 @@ export function NoteSlot({
   return (
     <div
       data-testid={testId}
-      className={`flex aspect-square w-full flex-col items-center justify-center gap-1 ${roundedClassName(rounded)} ${toneClassName(color, hasNote)}`}
+      className={containerClassName(color, hasNote, rounded)}
     >
       {placeholderGlyph(hasNote)}
       <span
         data-testid={`${testId}-note`}
         className="text-2xl font-bold sm:text-3xl"
       >
-        {note ?? ''}
+        {note}
       </span>
       <span
         data-testid={`${testId}-degree`}
         className="text-xs font-medium uppercase tracking-wide opacity-80"
       >
-        {degree ?? ''}
+        {degree}
       </span>
     </div>
   );

@@ -138,7 +138,7 @@ describe('ChordBuilder', () => {
     expect(ChordBuilderWrapper.chordName()).toBe('C7');
   });
 
-  it('builds a minor 6 chord with a sixth seventh slot', async () => {
+  it('builds a minor sixth chord via the seventh picker', async () => {
     ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
