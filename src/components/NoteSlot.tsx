@@ -1,16 +1,24 @@
-export type SlotColor = 'primary' | 'accent' | 'secondary';
+export type SlotColor =
+  | 'primary'
+  | 'accent'
+  | 'secondary'
+  | 'positive'
+  | 'negative';
 
 type NoteSlotProps = {
   testId: string;
   color: SlotColor;
   note?: string;
   degree?: string;
+  rounded?: boolean;
 };
 
 const filledClassName: Record<SlotColor, string> = {
   primary: 'bg-primary text-primary-fg',
   accent: 'bg-accent text-accent-fg',
   secondary: 'bg-secondary text-secondary-fg',
+  positive: 'bg-positive text-positive-fg',
+  negative: 'bg-negative text-negative-fg',
 };
 
 function toneClassName(color: SlotColor, hasNote: boolean): string {
@@ -27,13 +35,26 @@ function placeholderGlyph(hasNote: boolean) {
   return <span className="text-3xl opacity-30">–</span>;
 }
 
-export function NoteSlot({ testId, color, note, degree }: NoteSlotProps) {
+function roundedClassName(rounded: boolean): string {
+  if (rounded) {
+    return 'rounded-xl';
+  }
+  return '';
+}
+
+export function NoteSlot({
+  testId,
+  color,
+  note,
+  degree,
+  rounded = true,
+}: NoteSlotProps) {
   const hasNote = note !== undefined;
 
   return (
     <div
       data-testid={testId}
-      className={`flex aspect-square w-full flex-col items-center justify-center gap-1 rounded-xl ${toneClassName(color, hasNote)}`}
+      className={`flex aspect-square w-full flex-col items-center justify-center gap-1 ${roundedClassName(rounded)} ${toneClassName(color, hasNote)}`}
     >
       {placeholderGlyph(hasNote)}
       <span

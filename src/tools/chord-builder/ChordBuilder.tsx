@@ -1,12 +1,33 @@
 import { useState } from 'react';
-import { Chord } from 'tonal';
+import { Note } from 'tonal';
 import { useInstrument } from '../../audio/InstrumentProvider';
-import { type Accidental, spellTonic } from '../../theory/chords';
+import { useInstrumentKey } from '../../instrument-key/InstrumentKeyProvider';
+import { toConcertPitch } from '../../instrument-key/instrumentKey';
+import {
+  type Accidental,
+  type ChordSelection,
+  chordIntervals,
+  chordName,
+  type Extension,
+  type Seventh,
+  spellTonic,
+  type Triad,
+} from '../../theory/chords';
 import { AccidentalSwitch } from './AccidentalSwitch';
+import { ChordName } from './ChordName';
 import { ChordSlots } from './ChordSlots';
-import { QualityPicker } from './QualityPicker';
+import { ExtensionPicker } from './ExtensionPicker';
+import { PlayButton } from './PlayButton';
 import { RootPicker } from './RootPicker';
-import { SectionHeader } from './SectionHeader';
+import { SeventhPicker } from './SeventhPicker';
+import { TriadPicker } from './TriadPicker';
+
+function toggle<T>(current: T | null, next: T): T | null {
+  if (current === next) {
+    return null;
+  }
+  return next;
+}
 
 function deriveSpelledTonic(
   tonic: string | null,
@@ -18,66 +39,101 @@ function deriveSpelledTonic(
   return spellTonic(tonic, accidental);
 }
 
-function deriveChord(
-  spelledTonic: string | null,
-  chordType: string | null,
-): Chord.Chord | null {
-  if (spelledTonic === null || chordType === null) {
-    return null;
-  }
-  return Chord.getChord(chordType, spelledTonic);
-}
-
 export function ChordBuilder() {
   const instrument = useInstrument();
+  const { instrumentKey } = useInstrumentKey();
   const [tonic, setTonic] = useState<string | null>(null);
-  const [chordType, setChordType] = useState<string | null>(null);
   const [accidental, setAccidental] = useState<Accidental>('flat');
+  const [selection, setSelection] = useState<ChordSelection>({
+    triad: null,
+    seventh: null,
+    extension: null,
+  });
 
   const spelledTonic = deriveSpelledTonic(tonic, accidental);
-  const chord = deriveChord(spelledTonic, chordType);
+  const playDisabled = tonic === null || selection.triad === null;
 
-  function play(nextTonic: string | null, nextChordType: string | null) {
-    if (nextTonic === null || nextChordType === null) {
+  function play(nextTonic: string | null, nextSelection: ChordSelection) {
+    if (nextTonic === null) {
       return;
     }
-    void instrument.playChord(Chord.notes(nextChordType, `${nextTonic}4`));
+    const notes = chordIntervals(nextSelection).map((interval) =>
+      Note.transpose(`${nextTonic}4`, interval),
+    );
+    void instrument.playChord(toConcertPitch(notes, instrumentKey));
   }
 
   function selectTonic(nextTonic: string) {
     setTonic(nextTonic);
-    play(spellTonic(nextTonic, accidental), chordType);
+    if (selection.triad !== null) {
+      play(spellTonic(nextTonic, accidental), selection);
+    }
   }
 
-  function selectChordType(nextChordType: string) {
-    setChordType(nextChordType);
-    play(spelledTonic, nextChordType);
+  function selectTriad(value: string) {
+    const next = { ...selection, triad: value as Triad };
+    setSelection(next);
+    play(spelledTonic, next);
+  }
+
+  function selectSeventh(value: string) {
+    const nextSeventh = toggle(selection.seventh, value as Seventh);
+    let nextExtension = selection.extension;
+    if (nextSeventh === null) {
+      nextExtension = null;
+    }
+    const next: ChordSelection = {
+      ...selection,
+      seventh: nextSeventh,
+      extension: nextExtension,
+    };
+    setSelection(next);
+    play(spelledTonic, next);
+  }
+
+  function selectExtension(value: string) {
+    const next = {
+      ...selection,
+      extension: toggle(selection.extension, value as Extension),
+    };
+    setSelection(next);
+    play(spelledTonic, next);
   }
 
   return (
     <div className="mx-auto flex max-w-3xl flex-col gap-6 p-4 sm:p-6">
-      <div className="flex flex-col gap-5 rounded-xl bg-panel p-4 sm:p-5">
-        <section className="flex flex-col gap-2">
-          <SectionHeader label="Root" surface="panel">
-            <AccidentalSwitch selected={accidental} onSelect={setAccidental} />
-          </SectionHeader>
+      <div className="flex flex-col gap-3 rounded-xl bg-panel p-3 sm:p-4">
+        <div className="flex gap-1.5">
           <RootPicker
             selected={tonic}
             accidental={accidental}
             onSelect={selectTonic}
           />
-        </section>
+          <div className="flex flex-col gap-1.5 sm:flex-row">
+            <AccidentalSwitch selected={accidental} onSelect={setAccidental} />
+            <PlayButton
+              disabled={playDisabled}
+              onClick={() => play(spelledTonic, selection)}
+            />
+          </div>
+        </div>
 
-        <section className="flex flex-col gap-2">
-          <SectionHeader label="Quality" surface="panel" />
-          <QualityPicker selected={chordType} onSelect={selectChordType} />
-        </section>
+        <div className="flex flex-col gap-1.5 sm:flex-row sm:gap-3">
+          <TriadPicker selected={selection.triad} onSelect={selectTriad} />
+          <SeventhPicker
+            selected={selection.seventh}
+            onSelect={selectSeventh}
+          />
+        </div>
+
+        <ExtensionPicker
+          selected={selection.extension}
+          onSelect={selectExtension}
+        />
       </div>
 
-      <section className="flex flex-col gap-2">
-        <SectionHeader label="Chord tones" surface="background" />
-        <ChordSlots tonic={spelledTonic} chord={chord} />
-      </section>
+      <ChordName name={chordName(spelledTonic, selection)} />
+      <ChordSlots tonic={spelledTonic} selection={selection} />
     </div>
   );
 }

@@ -21,7 +21,7 @@ function createFakeInstrument(): {
 
 let fakeInstrument: ReturnType<typeof createFakeInstrument>;
 
-type SlotPosition = 1 | 2 | 3;
+type SlotPosition = 1 | 2 | 3 | 4 | 5;
 
 function choiceGroup(groupLabel: string) {
   return {
@@ -43,10 +43,10 @@ function choiceGroup(groupLabel: string) {
   };
 }
 
-function accidentalSwitch() {
+function segmentedControl(groupLabel: string) {
   return {
     selected() {
-      const group = screen.getByRole('group', { name: 'Note spelling' });
+      const group = screen.getByRole('group', { name: groupLabel });
       const pressedButtons = within(group).getAllByRole('button', {
         pressed: true,
       });
@@ -57,14 +57,31 @@ function accidentalSwitch() {
     },
 
     async select(ariaLabel: string) {
-      const group = screen.getByRole('group', { name: 'Note spelling' });
+      const group = screen.getByRole('group', { name: groupLabel });
       await user.click(within(group).getByRole('button', { name: ariaLabel }));
+    },
+  };
+}
+
+function playButton() {
+  return {
+    isDisabled() {
+      const button = screen.getByRole('button', { name: 'Play chord' });
+      return button.hasAttribute('disabled');
+    },
+
+    async click() {
+      await user.click(screen.getByRole('button', { name: 'Play chord' }));
     },
   };
 }
 
 function slot(position: SlotPosition) {
   return {
+    exists() {
+      return screen.queryByTestId(`chord-slot-${position}`) !== null;
+    },
+
     note() {
       return screen.getByTestId(`chord-slot-${position}-note`).textContent!;
     },
@@ -89,16 +106,36 @@ export const ChordBuilderWrapper = {
     return choiceGroup('Root note');
   },
 
-  get qualityPicker() {
-    return choiceGroup('Chord quality');
+  get triadPicker() {
+    return choiceGroup('Triad');
+  },
+
+  get seventhPicker() {
+    return choiceGroup('Seventh');
+  },
+
+  get extensionPicker() {
+    return choiceGroup('Extension');
   },
 
   get accidentalSwitch() {
-    return accidentalSwitch();
+    return segmentedControl('Note spelling');
+  },
+
+  get instrumentKeySwitch() {
+    return segmentedControl('Instrument key');
+  },
+
+  get playButton() {
+    return playButton();
   },
 
   slot(position: SlotPosition) {
     return slot(position);
+  },
+
+  chordName(): string {
+    return screen.getByTestId('chord-name').textContent!;
   },
 
   playedNotes(): string[] | undefined {

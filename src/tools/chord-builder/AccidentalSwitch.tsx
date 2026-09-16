@@ -1,3 +1,5 @@
+import type { Segment } from '../../components/SegmentedControl';
+import { SegmentedControl } from '../../components/SegmentedControl';
 import type { Accidental } from '../../theory/chords';
 
 type AccidentalSwitchProps = {
@@ -5,48 +7,23 @@ type AccidentalSwitchProps = {
   onSelect: (accidental: Accidental) => void;
 };
 
-type Segment = {
-  value: Accidental;
-  glyph: string;
-  ariaLabel: string;
-};
-
-const SEGMENTS: Segment[] = [
-  { value: 'flat', glyph: '♭', ariaLabel: 'Flat' },
-  { value: 'sharp', glyph: '♯', ariaLabel: 'Sharp' },
+const SEGMENTS: Segment<Accidental>[] = [
+  { value: 'flat', label: '♭', ariaLabel: 'Flat' },
+  { value: 'sharp', label: '♯', ariaLabel: 'Sharp' },
 ];
-
-function segmentClassName(isSelected: boolean): string {
-  const base = 'h-8 w-9 text-sm font-semibold transition-colors';
-
-  if (isSelected) {
-    return `${base} bg-primary text-primary-fg`;
-  }
-
-  return `${base} bg-overlay text-overlay-fg-muted hover:text-overlay-fg`;
-}
 
 export function AccidentalSwitch({
   selected,
   onSelect,
 }: AccidentalSwitchProps) {
   return (
-    <fieldset
-      aria-label="Note spelling"
-      className="m-0 flex overflow-hidden rounded-lg border-0 p-0"
-    >
-      {SEGMENTS.map((segment) => (
-        <button
-          key={segment.value}
-          type="button"
-          aria-label={segment.ariaLabel}
-          aria-pressed={segment.value === selected}
-          onClick={() => onSelect(segment.value)}
-          className={segmentClassName(segment.value === selected)}
-        >
-          {segment.glyph}
-        </button>
-      ))}
-    </fieldset>
+    <SegmentedControl
+      groupLabel="Note spelling"
+      segments={SEGMENTS}
+      selected={selected}
+      onSelect={onSelect}
+      className="flex-1 flex-col sm:flex-none sm:flex-row"
+      segmentClassName="w-9 flex-1 text-sm sm:h-9 sm:flex-none"
+    />
   );
 }

@@ -28,7 +28,8 @@ export function RootPicker({
       options={options}
       selected={selected}
       onChange={onSelect}
-      className="grid grid-cols-6 gap-2 sm:grid-cols-12"
+      className="grid flex-1 grid-cols-6 gap-1.5 sm:grid-cols-12"
+      tone="neutral"
     />
   );
 }
