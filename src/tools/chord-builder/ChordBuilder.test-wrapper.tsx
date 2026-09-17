@@ -1,8 +1,7 @@
-import { render, screen, within } from '@testing-library/react';
+import { screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { App } from '../../App';
+import { mountApp } from '../../../mount-app';
 import type { Instrument } from '../../audio/Instrument';
-import { InstrumentProvider } from '../../audio/InstrumentProvider';
 
 const user = userEvent.setup();
 
@@ -81,13 +80,9 @@ function slot(position: SlotPosition) {
 }
 
 export const ChordBuilderWrapper = {
-  mount() {
+  async mount() {
     fakeInstrument = createFakeInstrument();
-    return render(
-      <InstrumentProvider instrument={fakeInstrument.instrument}>
-        <App />
-      </InstrumentProvider>,
-    );
+    return mountApp(fakeInstrument.instrument);
   },
 
   get rootPicker() {

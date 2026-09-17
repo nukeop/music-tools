@@ -1,3 +1,8 @@
+import {
+  SEGMENT_BASE_CLASSNAME,
+  segmentVariantClassName,
+} from './segmentStyle';
+
 export type Segment<T extends string> = {
   value: T;
   label: string;
@@ -12,13 +17,6 @@ type SegmentedControlProps<T extends string> = {
   className?: string;
   segmentClassName: string;
 };
-
-function variantClassName(isSelected: boolean): string {
-  if (isSelected) {
-    return 'bg-primary text-primary-fg';
-  }
-  return 'bg-overlay text-overlay-fg-muted hover:text-overlay-fg';
-}
 
 export function SegmentedControl<T extends string>({
   groupLabel,
@@ -40,7 +38,7 @@ export function SegmentedControl<T extends string>({
           aria-label={segment.ariaLabel}
           aria-pressed={segment.value === selected}
           onClick={() => onSelect(segment.value)}
-          className={`${segmentClassName} font-semibold transition-colors ${variantClassName(segment.value === selected)}`}
+          className={`${segmentClassName} ${SEGMENT_BASE_CLASSNAME} ${segmentVariantClassName(segment.value === selected)}`}
         >
           {segment.label}
         </button>

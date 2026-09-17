@@ -1,13 +1,15 @@
+import { RouterProvider } from '@tanstack/react-router';
 import { InstrumentKeyProvider } from './instrument-key/InstrumentKeyProvider';
-import { AppLayout } from './layout/AppLayout';
-import { ChordBuilder } from './tools/chord-builder/ChordBuilder';
+import { router as defaultRouter } from './router';
 
-export function App() {
+type AppProps = {
+  router?: typeof defaultRouter;
+};
+
+export function App({ router }: AppProps) {
   return (
     <InstrumentKeyProvider>
-      <AppLayout>
-        <ChordBuilder />
-      </AppLayout>
+      <RouterProvider router={router ?? defaultRouter} />
     </InstrumentKeyProvider>
   );
 }

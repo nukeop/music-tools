@@ -6,8 +6,8 @@ describe('ChordBuilder', () => {
     localStorage.clear();
   });
 
-  it('shows three empty slots when nothing is selected', () => {
-    ChordBuilderWrapper.mount();
+  it('shows three empty slots when nothing is selected', async () => {
+    await ChordBuilderWrapper.mount();
 
     expect(ChordBuilderWrapper.slot(1).note()).toBe('');
     expect(ChordBuilderWrapper.slot(1).degree()).toBe('');
@@ -19,7 +19,7 @@ describe('ChordBuilder', () => {
   });
 
   it('fills only the first slot when a root is selected', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
 
@@ -31,7 +31,7 @@ describe('ChordBuilder', () => {
   });
 
   it('builds a major triad from root and triad', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('Δ');
@@ -46,7 +46,7 @@ describe('ChordBuilder', () => {
   });
 
   it('builds a minor triad from root and triad', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('-');
@@ -61,7 +61,7 @@ describe('ChordBuilder', () => {
   });
 
   it('builds a diminished triad from root and triad', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('°');
@@ -76,7 +76,7 @@ describe('ChordBuilder', () => {
   });
 
   it('builds an augmented triad from root and triad', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('+');
@@ -91,7 +91,7 @@ describe('ChordBuilder', () => {
   });
 
   it('builds a sus2 chord with root, 2nd, 5th degrees', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('sus2');
@@ -106,7 +106,7 @@ describe('ChordBuilder', () => {
   });
 
   it('builds a sus4 chord with root, 4th, 5th degrees', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('sus4');
@@ -121,7 +121,7 @@ describe('ChordBuilder', () => {
   });
 
   it('builds a dominant 7 chord with a flat seventh slot', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('Δ');
@@ -139,7 +139,7 @@ describe('ChordBuilder', () => {
   });
 
   it('builds a minor sixth chord via the seventh picker', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('-');
@@ -151,7 +151,7 @@ describe('ChordBuilder', () => {
   });
 
   it('builds a full diminished seventh chord with a double-flat seventh', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('°');
@@ -163,7 +163,7 @@ describe('ChordBuilder', () => {
   });
 
   it('names a major triad with a diminished seventh in parentheses', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('Δ');
@@ -173,7 +173,7 @@ describe('ChordBuilder', () => {
   });
 
   it('names a diminished triad with a dominant seventh as half-diminished', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('°');
@@ -183,7 +183,7 @@ describe('ChordBuilder', () => {
   });
 
   it('names a sus4 dominant seventh chord', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('sus4');
@@ -193,7 +193,7 @@ describe('ChordBuilder', () => {
   });
 
   it('names a sus4 dominant seventh chord with a flat nine extension', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('sus4');
@@ -204,7 +204,7 @@ describe('ChordBuilder', () => {
   });
 
   it('names a sixth chord with a ninth extension as six-nine', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('Δ');
@@ -215,7 +215,7 @@ describe('ChordBuilder', () => {
   });
 
   it('adds a fifth slot when an extension is selected', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('-');
@@ -228,7 +228,7 @@ describe('ChordBuilder', () => {
   });
 
   it('removes the fourth and fifth slots when the seventh is deselected', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('-');
@@ -245,7 +245,7 @@ describe('ChordBuilder', () => {
   });
 
   it('respells the root and chord tones when the accidental switch changes', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     expect(ChordBuilderWrapper.accidentalSwitch.selected()).toBe('Flat');
 
@@ -266,7 +266,7 @@ describe('ChordBuilder', () => {
   });
 
   it('recomputes all three slots when the root changes after a triad is already selected', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('Δ');
@@ -281,7 +281,7 @@ describe('ChordBuilder', () => {
   });
 
   it('plays the new chord when the root changes after a triad is already selected', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('-');
@@ -291,7 +291,7 @@ describe('ChordBuilder', () => {
   });
 
   it('plays nothing when only a root is selected', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
 
@@ -299,7 +299,7 @@ describe('ChordBuilder', () => {
   });
 
   it('plays the spelled chord tones with octaves when a triad is selected', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('D♭');
     await ChordBuilderWrapper.triadPicker.select('Δ');
@@ -308,7 +308,7 @@ describe('ChordBuilder', () => {
   });
 
   it('plays sharp-spelled chord tones when the accidental switch is set to sharp', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.accidentalSwitch.select('Sharp');
     await ChordBuilderWrapper.rootPicker.select('C♯');
@@ -318,7 +318,7 @@ describe('ChordBuilder', () => {
   });
 
   it('plays a five-note chord with the extension an octave above the triad', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('-');
@@ -334,14 +334,14 @@ describe('ChordBuilder', () => {
     ]);
   });
 
-  it('disables the play button when no root is selected', () => {
-    ChordBuilderWrapper.mount();
+  it('disables the play button when no root is selected', async () => {
+    await ChordBuilderWrapper.mount();
 
     expect(ChordBuilderWrapper.playButton.isDisabled()).toBe(true);
   });
 
   it('disables the play button when only a root is selected', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
 
@@ -349,7 +349,7 @@ describe('ChordBuilder', () => {
   });
 
   it('enables the play button once a root and triad are selected', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('Δ');
@@ -358,7 +358,7 @@ describe('ChordBuilder', () => {
   });
 
   it('plays the current chord again when the play button is clicked', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.rootPicker.select('C');
     await ChordBuilderWrapper.triadPicker.select('Δ');
@@ -367,8 +367,8 @@ describe('ChordBuilder', () => {
     expect(ChordBuilderWrapper.playedNotes()).toEqual(['C4', 'E4', 'G4']);
   });
 
-  it('defaults the instrument key to C', () => {
-    ChordBuilderWrapper.mount();
+  it('defaults the instrument key to C', async () => {
+    await ChordBuilderWrapper.mount();
 
     expect(ChordBuilderWrapper.instrumentKeySwitch.selected()).toBe(
       'C instrument',
@@ -376,7 +376,7 @@ describe('ChordBuilder', () => {
   });
 
   it('transposes playback down a major second in B flat mode', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.instrumentKeySwitch.select('B flat instrument');
     await ChordBuilderWrapper.rootPicker.select('C');
@@ -386,7 +386,7 @@ describe('ChordBuilder', () => {
   });
 
   it('transposes playback down a major sixth in E flat mode', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.instrumentKeySwitch.select('E flat instrument');
     await ChordBuilderWrapper.rootPicker.select('C');
@@ -402,7 +402,7 @@ describe('ChordBuilder', () => {
   });
 
   it('keeps showing the written chord in B flat mode', async () => {
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.instrumentKeySwitch.select('B flat instrument');
     await ChordBuilderWrapper.rootPicker.select('C');
@@ -414,12 +414,12 @@ describe('ChordBuilder', () => {
   });
 
   it('persists the instrument key across a remount', async () => {
-    const first = ChordBuilderWrapper.mount();
+    const first = await ChordBuilderWrapper.mount();
 
     await ChordBuilderWrapper.instrumentKeySwitch.select('B flat instrument');
     first.unmount();
 
-    ChordBuilderWrapper.mount();
+    await ChordBuilderWrapper.mount();
 
     expect(ChordBuilderWrapper.instrumentKeySwitch.selected()).toBe(
       'B flat instrument',
