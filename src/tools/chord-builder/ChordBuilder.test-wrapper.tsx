@@ -1,54 +1,14 @@
-import { screen, within } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import { createFakeInstrument } from '../../../fake-instrument';
 import { mountApp } from '../../../mount-app';
-import type { Instrument } from '../../audio/Instrument';
+import { ariaLabelOf, group, textContentOf } from '../../../test-group';
 
 const user = userEvent.setup();
-
-function createFakeInstrument(): {
-  instrument: Instrument;
-  played: string[][];
-} {
-  const played: string[][] = [];
-  const instrument: Instrument = {
-    async playChord(notes: string[]) {
-      played.push(notes);
-    },
-  };
-  return { instrument, played };
-}
 
 let fakeInstrument: ReturnType<typeof createFakeInstrument>;
 
 type SlotPosition = 1 | 2 | 3 | 4 | 5;
-
-function textContentOf(button: HTMLElement): string {
-  return button.textContent!;
-}
-
-function ariaLabelOf(button: HTMLElement): string {
-  return button.getAttribute('aria-label')!;
-}
-
-function group(
-  groupLabel: string,
-  readSelected: (button: HTMLElement) => string,
-) {
-  return {
-    selected() {
-      const groupElement = screen.getByRole('group', { name: groupLabel });
-      const pressedButtons = within(groupElement).getAllByRole('button', {
-        pressed: true,
-      });
-      return readSelected(pressedButtons[0]);
-    },
-
-    async select(name: string) {
-      const groupElement = screen.getByRole('group', { name: groupLabel });
-      await user.click(within(groupElement).getByRole('button', { name }));
-    },
-  };
-}
 
 function playButton() {
   return {
@@ -122,6 +82,6 @@ export const ChordBuilderWrapper = {
   },
 
   playedNotes(): string[] | undefined {
-    return fakeInstrument.played.at(-1);
+    return fakeInstrument.playedChords.at(-1);
   },
 };

@@ -3,7 +3,7 @@ export type ChoiceOption<T extends string> = {
   label: string;
 };
 
-type Variant = 'neutral' | 'primary' | 'positive' | 'negative';
+type Variant = 'neutral' | 'primary' | 'accent' | 'positive' | 'negative';
 
 type ChoiceGroupProps<T extends string> = {
   groupLabel: string;
@@ -27,6 +27,10 @@ const VARIANT_CLASS_NAMES: Record<Variant, VariantClassNames> = {
   primary: {
     idle: 'bg-primary/15 text-panel-fg hover:bg-primary/25',
     selected: 'bg-primary text-primary-fg',
+  },
+  accent: {
+    idle: 'bg-accent/15 text-panel-fg hover:bg-accent/25',
+    selected: 'bg-accent text-accent-fg',
   },
   positive: {
     idle: 'bg-positive/15 text-panel-fg hover:bg-positive/25',

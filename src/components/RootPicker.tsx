@@ -1,10 +1,10 @@
-import { ChoiceGroup } from '../../components/ChoiceGroup';
 import {
   type Accidental,
   formatNote,
   spellTonic,
   TONICS,
-} from '../../theory/chords';
+} from '../theory/chords';
+import { ChoiceGroup } from './ChoiceGroup';
 
 type RootPickerProps = {
   selected: string | null;

@@ -17,8 +17,8 @@
   --primary-fg: #2b1b26;
   --secondary: #845f71;
   --secondary-fg: #ffecd6;
-  --accent: #00736a;
-  --accent-fg: #ffecd6;
+  --accent: #00b09a;
+  --accent-fg: #2b1b26;
   --positive: #2b7440;
   --positive-fg: #ffecd6;
   --negative: #b94642;
@@ -40,12 +40,22 @@
   --primary-fg: #2b1b26;
   --secondary: #c296ab;
   --secondary-fg: #2b1b26;
-  --accent: #68c4b8;
+  --accent: #2ef0d0;
   --accent-fg: #2b1b26;
   --positive: #76c788;
   --positive-fg: #2b1b26;
   --negative: #f47b74;
   --negative-fg: #2b1b26;
+}
+
+@layer base {
+  button,
+  select,
+  fieldset,
+  nav {
+    user-select: none;
+    -webkit-user-select: none;
+  }
 }
 
 @theme inline {

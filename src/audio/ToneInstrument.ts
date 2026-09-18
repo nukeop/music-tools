@@ -35,11 +35,37 @@ export class ToneInstrument implements Instrument {
     return this.synth;
   }
 
-  async playChord(notes: string[]): Promise<void> {
+  private async activate(): Promise<{ Tone: ToneModule; synth: Synth }> {
     const Tone = await import('tone');
     await Tone.start();
     const synth = this.getSynth(Tone);
     synth.releaseAll();
+    return { Tone, synth };
+  }
+
+  async playChord(notes: string[]): Promise<void> {
+    const { synth } = await this.activate();
     synth.triggerAttackRelease(notes, CHORD_DURATION_SECONDS);
+  }
+
+  async playSequence(
+    notes: string[],
+    secondsPerNote: number,
+    onNoteStart: (index: number) => void,
+  ): Promise<void> {
+    const { Tone, synth } = await this.activate();
+
+    const startTime = Tone.now();
+    const draw = Tone.getDraw();
+
+    notes.forEach((note, index) => {
+      const time = startTime + index * secondsPerNote;
+      synth.triggerAttackRelease(note, secondsPerNote, time);
+      draw.schedule(() => onNoteStart(index), time);
+    });
+
+    return new Promise((resolve) => {
+      draw.schedule(resolve, startTime + notes.length * secondsPerNote);
+    });
   }
 }

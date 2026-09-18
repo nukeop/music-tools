@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import { Note } from 'tonal';
 import { useInstrument } from '../../audio/InstrumentProvider';
+import { AccidentalSwitch } from '../../components/AccidentalSwitch';
 import { ChoiceGroup } from '../../components/ChoiceGroup';
+import { RootPicker } from '../../components/RootPicker';
 import { useInstrumentKey } from '../../instrument-key/InstrumentKeyProvider';
 import { toConcertPitch } from '../../instrument-key/instrumentKey';
 import {
@@ -14,7 +16,6 @@ import {
   spellTonic,
   type Triad,
 } from '../../theory/chords';
-import { AccidentalSwitch } from './AccidentalSwitch';
 import { ChordName } from './ChordName';
 import { ChordSlots } from './ChordSlots';
 import {
@@ -23,7 +24,6 @@ import {
   TRIAD_OPTIONS,
 } from './layerOptions';
 import { PlayButton } from './PlayButton';
-import { RootPicker } from './RootPicker';
 
 function toggle<T>(current: T | null, next: T): T | null {
   if (current === next) {
@@ -102,7 +102,11 @@ export function ChordBuilder() {
             onSelect={selectTonic}
           />
           <div className="flex flex-col gap-1.5 sm:flex-row">
-            <AccidentalSwitch selected={accidental} onSelect={setAccidental} />
+            <AccidentalSwitch
+              selected={accidental}
+              onSelect={setAccidental}
+              className="flex-1 flex-col sm:flex-none sm:flex-row"
+            />
             <PlayButton
               disabled={playDisabled}
               onClick={() => play(spelledTonic, selection)}

@@ -1,10 +1,11 @@
-import type { Segment } from '../../components/SegmentedControl';
-import { SegmentedControl } from '../../components/SegmentedControl';
-import type { Accidental } from '../../theory/chords';
+import type { Accidental } from '../theory/chords';
+import type { Segment } from './SegmentedControl';
+import { SegmentedControl } from './SegmentedControl';
 
 type AccidentalSwitchProps = {
   selected: Accidental;
   onSelect: (accidental: Accidental) => void;
+  className?: string;
 };
 
 const SEGMENTS: Segment<Accidental>[] = [
@@ -15,6 +16,7 @@ const SEGMENTS: Segment<Accidental>[] = [
 export function AccidentalSwitch({
   selected,
   onSelect,
+  className,
 }: AccidentalSwitchProps) {
   return (
     <SegmentedControl
@@ -22,8 +24,8 @@ export function AccidentalSwitch({
       segments={SEGMENTS}
       selected={selected}
       onSelect={onSelect}
-      className="flex-1 flex-col sm:flex-none sm:flex-row"
-      segmentClassName="w-9 flex-1 text-sm sm:h-9 sm:flex-none"
+      className={className}
+      segmentClassName="h-9 w-9 text-sm"
     />
   );
 }

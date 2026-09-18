@@ -1,10 +1,10 @@
 import {
-  createHashHistory,
   createRootRoute,
   createRoute,
   createRouter,
   type RouterHistory,
 } from '@tanstack/react-router';
+import { readBasePath } from './basePath';
 import { AppLayout } from './layout/AppLayout';
 import { TOOLS } from './tools/registry';
 
@@ -25,7 +25,8 @@ export const routeTree = rootRoute.addChildren(toolRoutes);
 export function createAppRouter(history?: RouterHistory) {
   return createRouter({
     routeTree,
-    history: history ?? createHashHistory(),
+    history,
+    basepath: readBasePath(),
   });
 }
 

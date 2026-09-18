@@ -8,6 +8,7 @@ const user = userEvent.setup();
 function createFakeInstrument(): Instrument {
   return {
     async playChord() {},
+    async playSequence() {},
   };
 }
 
