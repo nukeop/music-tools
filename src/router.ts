@@ -3,6 +3,7 @@ import {
   createRoute,
   createRouter,
   type RouterHistory,
+  redirect,
 } from '@tanstack/react-router';
 import { readBasePath } from './basePath';
 import { AppLayout } from './layout/AppLayout';
@@ -10,6 +11,14 @@ import { TOOLS } from './tools/registry';
 
 const rootRoute = createRootRoute({
   component: AppLayout,
+});
+
+const indexRoute = createRoute({
+  getParentRoute: () => rootRoute,
+  path: '/',
+  beforeLoad: () => {
+    throw redirect({ to: TOOLS[0].path });
+  },
 });
 
 const toolRoutes = TOOLS.map((tool) =>
@@ -20,7 +29,7 @@ const toolRoutes = TOOLS.map((tool) =>
   }),
 );
 
-export const routeTree = rootRoute.addChildren(toolRoutes);
+export const routeTree = rootRoute.addChildren([indexRoute, ...toolRoutes]);
 
 export function createAppRouter(history?: RouterHistory) {
   return createRouter({

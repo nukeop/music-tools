@@ -14,7 +14,7 @@ export type Tool = {
 
 export const TOOLS = [
   {
-    path: '/',
+    path: '/chords',
     label: 'Chords',
     icon: music,
     component: ChordBuilder,
