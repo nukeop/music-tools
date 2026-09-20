@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react/dist/offline';
 import { Link } from '@tanstack/react-router';
-import { segmentVariantClassName } from '../components/segmentStyle';
+import { buttonVariantClassName } from '../components/Button';
 import { Tooltip } from '../components/Tooltip';
 import { TOOLS } from '../tools/registry';
 
@@ -21,8 +21,10 @@ export function ToolNav({ className }: ToolNavProps) {
             aria-label={tool.label}
             activeOptions={{ exact: true }}
             className="flex flex-1 items-center justify-center rounded-lg p-2 transition-colors"
-            activeProps={{ className: segmentVariantClassName(true) }}
-            inactiveProps={{ className: segmentVariantClassName(false) }}
+            activeProps={{ className: buttonVariantClassName('neutral', true) }}
+            inactiveProps={{
+              className: buttonVariantClassName('neutral', false),
+            }}
           >
             <Icon icon={tool.icon} className="size-5" />
           </Link>

@@ -76,6 +76,7 @@ export const TriadPairsWrapper = {
     fakeInstrument = createFakeInstrument();
     const result = await mountApp(fakeInstrument.instrument);
     await user.click(screen.getByRole('link', { name: 'Triad pairs' }));
+    await screen.findByRole('heading', { name: 'Triad pairs' });
     return result;
   },
 

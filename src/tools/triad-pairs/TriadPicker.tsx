@@ -1,8 +1,9 @@
+import { Button } from '../../components/Button';
 import { ChoiceGroup } from '../../components/ChoiceGroup';
+import { Select } from '../../components/Select';
 import type { Degree, TriadQuality } from '../../theory/triadPairs';
-import { DegreeSelect } from './DegreeSelect';
-import { QUALITY_OPTIONS } from './options';
-import { TRIAD_COLORS, type TriadColorClasses } from './triadColors';
+import { DEGREE_OPTIONS, QUALITY_OPTIONS } from './options';
+import { TRIAD_COLORS } from './triadColors';
 
 type TriadPickerProps = {
   index: 1 | 2;
@@ -13,17 +14,6 @@ type TriadPickerProps = {
   onQualityChange: (quality: TriadQuality) => void;
   onAutoToggle: () => void;
 };
-
-const AUTO_BASE =
-  'flex h-9 items-center justify-center rounded-lg px-2 text-xs font-semibold transition-colors sm:text-sm';
-const AUTO_IDLE = `${AUTO_BASE} bg-overlay/50 text-overlay-fg-muted hover:text-overlay-fg`;
-
-function autoClassName(colors: TriadColorClasses, isPressed: boolean): string {
-  if (isPressed) {
-    return `${AUTO_BASE} ${colors.autoPressed}`;
-  }
-  return AUTO_IDLE;
-}
 
 export function TriadPicker({
   index,
@@ -39,8 +29,9 @@ export function TriadPicker({
 
   return (
     <div className={`flex flex-1 flex-col gap-3 rounded-xl p-3 ${colors.card}`}>
-      <DegreeSelect
+      <Select
         label={`${label} degree`}
+        options={DEGREE_OPTIONS}
         selected={degree}
         onChange={onDegreeChange}
       />
@@ -53,15 +44,15 @@ export function TriadPicker({
           className="grid flex-1 grid-cols-4 gap-1.5"
           variant={colors.variant}
         />
-        <button
-          type="button"
+        <Button
+          variant={colors.variant}
+          pressed={auto}
           aria-label={`${label} auto quality`}
-          aria-pressed={auto}
           onClick={onAutoToggle}
-          className={autoClassName(colors, auto)}
+          className="h-9 px-2 text-xs sm:text-sm"
         >
           Auto
-        </button>
+        </Button>
       </div>
     </div>
   );

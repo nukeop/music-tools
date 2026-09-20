@@ -1,33 +1,45 @@
 import { Icon } from '@iconify/react/dist/offline';
 import chevronDown from '@iconify-icons/lucide/chevron-down';
 import type { ChangeEvent } from 'react';
-import type { Degree } from '../../theory/triadPairs';
-import { DEGREE_OPTIONS } from './options';
 
-type DegreeSelectProps = {
+type SelectOption<T extends string> = {
+  value: T;
   label: string;
-  selected: Degree;
-  onChange: (degree: Degree) => void;
 };
 
-const DEGREE_BY_VALUE: Record<string, Degree> = Object.fromEntries(
-  DEGREE_OPTIONS.map((option) => [option.value, option.value] as const),
-);
+type SelectProps<T extends string> = {
+  label: string;
+  options: SelectOption<T>[];
+  selected: T;
+  onChange: (value: T) => void;
+  className?: string;
+};
 
-export function DegreeSelect({ label, selected, onChange }: DegreeSelectProps) {
+export function Select<T extends string>({
+  label,
+  options,
+  selected,
+  onChange,
+  className,
+}: SelectProps<T>) {
+  const valueMap: Record<string, T> = Object.fromEntries(
+    options.map((option) => [option.value, option.value]),
+  );
+
   function handleChange(event: ChangeEvent<HTMLSelectElement>) {
-    onChange(DEGREE_BY_VALUE[event.target.value]);
+    const typed = valueMap[event.target.value];
+    onChange(typed);
   }
 
   return (
-    <div className="relative">
+    <div className={`relative ${className ?? ''}`}>
       <select
         aria-label={label}
         value={selected}
         onChange={handleChange}
         className="h-9 w-full appearance-none rounded-lg bg-overlay pr-8 pl-3 text-sm font-semibold text-overlay-fg outline-none"
       >
-        {DEGREE_OPTIONS.map((option) => (
+        {options.map((option) => (
           <option key={option.value} value={option.value}>
             {option.label}
           </option>

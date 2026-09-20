@@ -1,6 +1,7 @@
 import { Icon } from '@iconify/react/dist/offline';
 import moon from '@iconify-icons/lucide/moon';
 import sun from '@iconify-icons/lucide/sun';
+import { Button } from '../components/Button';
 import type { Theme } from './theme';
 import { useTheme } from './useTheme';
 
@@ -15,13 +16,13 @@ export function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
 
   return (
-    <button
-      type="button"
+    <Button
+      variant="neutral"
       onClick={toggleTheme}
       aria-label="Toggle dark mode"
-      className="rounded-lg p-2 text-panel-fg-muted hover:bg-overlay hover:text-overlay-fg"
+      className="p-2"
     >
       <Icon icon={iconFor(theme)} className="size-5" />
-    </button>
+    </Button>
   );
 }

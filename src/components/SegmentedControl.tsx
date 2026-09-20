@@ -1,7 +1,4 @@
-import {
-  SEGMENT_BASE_CLASSNAME,
-  segmentVariantClassName,
-} from './segmentStyle';
+import { Button } from './Button';
 
 export type Segment<T extends string> = {
   value: T;
@@ -32,16 +29,17 @@ export function SegmentedControl<T extends string>({
       className={`m-0 flex overflow-hidden rounded-lg border-0 p-0 ${className ?? ''}`}
     >
       {segments.map((segment) => (
-        <button
+        <Button
           key={segment.value}
-          type="button"
+          variant="neutral"
+          shape="square"
+          pressed={segment.value === selected}
           aria-label={segment.ariaLabel}
-          aria-pressed={segment.value === selected}
           onClick={() => onSelect(segment.value)}
-          className={`${segmentClassName} ${SEGMENT_BASE_CLASSNAME} ${segmentVariantClassName(segment.value === selected)}`}
+          className={segmentClassName}
         >
           {segment.label}
-        </button>
+        </Button>
       ))}
     </fieldset>
   );

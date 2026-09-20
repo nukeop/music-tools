@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react/dist/offline';
 import play from '@iconify-icons/lucide/play';
+import { Button } from '../../components/Button';
 import type { LineEntry } from '../../theory/patterns';
 import { LineRow } from './LineRow';
 import type { ActiveNote } from './usePlayback';
@@ -13,9 +14,6 @@ type LinesProps = {
 
 const LINE_LABELS = ['Root position', '1st inversion', '2nd inversion'];
 
-const PLAY_ALL =
-  'flex h-9 items-center gap-1.5 self-end rounded-lg bg-primary px-3 text-sm font-semibold text-primary-fg transition-colors hover:bg-primary/80';
-
 export function Lines({
   lines,
   activeNote,
@@ -24,15 +22,16 @@ export function Lines({
 }: LinesProps) {
   return (
     <div className="flex flex-col gap-4">
-      <button
-        type="button"
+      <Button
+        variant="primary"
+        pressed
         aria-label="Play all"
         onClick={onPlayAll}
-        className={PLAY_ALL}
+        className="h-9 gap-1.5 self-end px-3 text-sm"
       >
         <Icon icon={play} className="size-4" />
         Play all
-      </button>
+      </Button>
       {lines.map((entries, lineIndex) => (
         <LineRow
           key={LINE_LABELS[lineIndex]}

@@ -1,5 +1,6 @@
 import { Icon } from '@iconify/react/dist/offline';
 import play from '@iconify-icons/lucide/play';
+import { Button } from '../../components/Button';
 import { formatNote } from '../../theory/chords';
 import type { LineEntry } from '../../theory/patterns';
 import { TRIAD_COLORS, type TriadColorClasses } from './triadColors';
@@ -15,8 +16,6 @@ type LineRowProps = {
 
 const CHIP_BASE =
   'flex h-9 flex-1 items-center justify-center rounded-lg text-xs font-semibold transition-colors sm:text-sm';
-const PLAY_BUTTON =
-  'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-overlay text-overlay-fg-muted transition-colors hover:text-overlay-fg';
 
 function chipClassName(colors: TriadColorClasses, isActive: boolean): string {
   if (isActive) {
@@ -58,14 +57,14 @@ export function LineRow({
             );
           })}
         </div>
-        <button
-          type="button"
+        <Button
+          variant="neutral"
           aria-label={`Play ${label.toLowerCase()}`}
           onClick={onPlay}
-          className={PLAY_BUTTON}
+          className="size-9 shrink-0"
         >
           <Icon icon={play} className="size-4" />
-        </button>
+        </Button>
       </div>
     </div>
   );

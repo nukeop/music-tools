@@ -61,7 +61,11 @@ export function TriadPairs() {
           accidental={accidental}
           onSelect={setTonic}
         />
-        <AccidentalSwitch selected={accidental} onSelect={setAccidental} />
+        <AccidentalSwitch
+          selected={accidental}
+          onSelect={setAccidental}
+          className="flex-col sm:flex-row"
+        />
       </div>
 
       <div className="flex gap-4">
