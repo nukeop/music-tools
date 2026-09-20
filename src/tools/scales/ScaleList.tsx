@@ -15,13 +15,36 @@ import {
 import { ScaleRow } from './ScaleRow';
 import type { ScaleItem } from './useScaleList';
 
+type ActiveTone = {
+  id: number;
+  index: number;
+};
+
 type ScaleListProps = {
   items: ScaleItem[];
+  activeTone: ActiveTone | null;
+  onPlay: (item: ScaleItem) => void;
   onMove: (from: number, to: number) => void;
   onRemove: (id: number) => void;
 };
 
-export function ScaleList({ items, onMove, onRemove }: ScaleListProps) {
+function activeToneForItem(
+  activeTone: ActiveTone | null,
+  itemId: number,
+): number | null {
+  if (activeTone?.id === itemId) {
+    return activeTone.index;
+  }
+  return null;
+}
+
+export function ScaleList({
+  items,
+  activeTone,
+  onPlay,
+  onMove,
+  onRemove,
+}: ScaleListProps) {
   const sensors = useSensors(
     useSensor(PointerSensor, {
       activationConstraint: { distance: 4 },
@@ -64,6 +87,8 @@ export function ScaleList({ items, onMove, onRemove }: ScaleListProps) {
               id={item.id}
               root={item.root}
               scale={item.scale}
+              activeToneIndex={activeToneForItem(activeTone, item.id)}
+              onPlay={() => onPlay(item)}
               onRemove={() => onRemove(item.id)}
             />
           ))}

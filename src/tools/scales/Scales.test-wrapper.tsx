@@ -6,6 +6,8 @@ import { ariaLabelOf, group, textContentOf } from '../../../test-group';
 
 const user = userEvent.setup();
 
+let fakeInstrument: ReturnType<typeof createFakeInstrument>;
+
 const ROW_HEIGHT = 40;
 
 function getDragHandle(row: HTMLElement) {
@@ -78,6 +80,12 @@ function scaleRow(index: number) {
           restore();
         },
       };
+    },
+
+    async play() {
+      const row = getRow();
+      const button = within(row).getByRole('button', { name: 'Play' });
+      await user.click(button);
     },
 
     async remove() {
@@ -164,8 +172,8 @@ async function pointerDragRow(fromIndex: number, toIndex: number) {
 
 export const ScalesWrapper = {
   async mount() {
-    const { instrument } = createFakeInstrument();
-    const result = await mountApp(instrument);
+    fakeInstrument = createFakeInstrument();
+    const result = await mountApp(fakeInstrument.instrument);
     await user.click(screen.getByRole('link', { name: 'Scales' }));
     await screen.findByRole('heading', { name: 'Scales' });
     return result;
@@ -194,6 +202,14 @@ export const ScalesWrapper = {
     return rows.map((row) =>
       textContentOf(within(row).getByTestId('scale-name')),
     );
+  },
+
+  get instrumentKeySwitch() {
+    return group('Instrument key', ariaLabelOf);
+  },
+
+  playedSequences() {
+    return fakeInstrument.playedSequences;
   },
 
   pointerDragRow,

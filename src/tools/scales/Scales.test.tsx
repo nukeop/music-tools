@@ -183,6 +183,54 @@ describe('Scales', () => {
     ]);
   });
 
+  it('plays C major pentatonic as ascending pitches from octave 4', async () => {
+    await ScalesWrapper.mount();
+    await ScalesWrapper.addScale('Major pentatonic');
+
+    await ScalesWrapper.row(0).play();
+
+    expect(ScalesWrapper.playedSequences()).toEqual([
+      { notes: ['C4', 'D4', 'E4', 'G4', 'A4'], secondsPerNote: 0.3 },
+    ]);
+  });
+
+  it('plays A minor pentatonic with correct octave rollover', async () => {
+    await ScalesWrapper.mount();
+    await ScalesWrapper.rootPicker.select('A');
+    await ScalesWrapper.addScale('Minor pentatonic');
+
+    await ScalesWrapper.row(0).play();
+
+    expect(ScalesWrapper.playedSequences()).toEqual([
+      { notes: ['A4', 'C5', 'D5', 'E5', 'G5'], secondsPerNote: 0.3 },
+    ]);
+  });
+
+  it('transposes pitches for a B♭ instrument', async () => {
+    await ScalesWrapper.mount();
+    await ScalesWrapper.instrumentKeySwitch.select('B flat instrument');
+    await ScalesWrapper.addScale('Major pentatonic');
+
+    await ScalesWrapper.row(0).play();
+
+    expect(ScalesWrapper.playedSequences()).toEqual([
+      { notes: ['Bb3', 'C4', 'D4', 'F4', 'G4'], secondsPerNote: 0.3 },
+    ]);
+  });
+
+  it('plays the second of two stacked scales', async () => {
+    await ScalesWrapper.mount();
+    await ScalesWrapper.addScale('Major pentatonic');
+    await ScalesWrapper.rootPicker.select('A');
+    await ScalesWrapper.addScale('Minor pentatonic');
+
+    await ScalesWrapper.row(1).play();
+
+    expect(ScalesWrapper.playedSequences()).toEqual([
+      { notes: ['A4', 'C5', 'D5', 'E5', 'G5'], secondsPerNote: 0.3 },
+    ]);
+  });
+
   it('moves a row up via keyboard on the drag handle', async () => {
     await ScalesWrapper.mount();
     await ScalesWrapper.addScale('Major pentatonic');

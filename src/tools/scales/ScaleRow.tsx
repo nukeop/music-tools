@@ -1,6 +1,7 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Icon } from '@iconify/react/dist/offline';
+import play from '@iconify-icons/lucide/play';
 import x from '@iconify-icons/lucide/x';
 import { Button } from '../../components/Button';
 import { type ScaleType, scaleName, scaleNotes } from '../../theory/scales';
@@ -11,6 +12,8 @@ type ScaleRowProps = {
   id: number;
   root: string;
   scale: ScaleType;
+  activeToneIndex: number | null;
+  onPlay: () => void;
   onRemove: () => void;
 };
 
@@ -23,7 +26,14 @@ function rowClassName(isDragging: boolean): string {
   return ROW_BASE;
 }
 
-export function ScaleRow({ id, root, scale, onRemove }: ScaleRowProps) {
+export function ScaleRow({
+  id,
+  root,
+  scale,
+  activeToneIndex,
+  onPlay,
+  onRemove,
+}: ScaleRowProps) {
   const {
     attributes,
     listeners,
@@ -61,10 +71,23 @@ export function ScaleRow({ id, root, scale, onRemove }: ScaleRowProps) {
         {name}
       </span>
       <div className="flex flex-1 gap-1">
-        {notes.map((note) => (
-          <ScaleTone key={note} note={note} isRoot={note === root} />
+        {notes.map((note, index) => (
+          <ScaleTone
+            key={note}
+            note={note}
+            isRoot={note === root}
+            isActive={activeToneIndex === index}
+          />
         ))}
       </div>
+      <Button
+        variant="neutral"
+        aria-label="Play"
+        onClick={onPlay}
+        className="size-8 shrink-0"
+      >
+        <Icon icon={play} className="size-4" />
+      </Button>
       <Button
         variant="neutral"
         aria-label="Remove"
