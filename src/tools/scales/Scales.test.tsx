@@ -30,6 +30,39 @@ describe('Scales', () => {
     ]);
   });
 
+  it('spells D dorian', async () => {
+    await ScalesWrapper.mount();
+    await ScalesWrapper.rootPicker.select('D');
+    await ScalesWrapper.addScale('Dorian');
+
+    expect(ScalesWrapper.row(0).name()).toBe('D dorian');
+    expect(ScalesWrapper.row(0).tones()).toEqual([
+      'D',
+      'E',
+      'F',
+      'G',
+      'A',
+      'B',
+      'C',
+    ]);
+  });
+
+  it('spells C aeolian', async () => {
+    await ScalesWrapper.mount();
+    await ScalesWrapper.addScale('Aeolian');
+
+    expect(ScalesWrapper.row(0).name()).toBe('C aeolian');
+    expect(ScalesWrapper.row(0).tones()).toEqual([
+      'C',
+      'D',
+      'E♭',
+      'F',
+      'G',
+      'A♭',
+      'B♭',
+    ]);
+  });
+
   it('spells A harmonic minor', async () => {
     await ScalesWrapper.mount();
     await ScalesWrapper.rootPicker.select('A');
@@ -44,6 +77,22 @@ describe('Scales', () => {
       'E',
       'F',
       'G♯',
+    ]);
+  });
+
+  it('spells C byzantine', async () => {
+    await ScalesWrapper.mount();
+    await ScalesWrapper.addScale('Byzantine');
+
+    expect(ScalesWrapper.row(0).name()).toBe('C byzantine');
+    expect(ScalesWrapper.row(0).tones()).toEqual([
+      'C',
+      'D♭',
+      'E',
+      'F',
+      'G',
+      'A♭',
+      'B',
     ]);
   });
 

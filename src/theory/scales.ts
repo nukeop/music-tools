@@ -6,8 +6,11 @@ export type ScaleType =
   | 'minor-pentatonic'
   | 'major-blues'
   | 'minor-blues'
+  | 'dorian'
+  | 'aeolian'
   | 'altered'
   | 'harmonic-minor'
+  | 'byzantine'
   | 'superphrygian'
   | 'lydian-dominant'
   | 'half-whole-diminished'
@@ -35,6 +38,14 @@ export const SCALES: Record<ScaleType, ScaleDefinition> = {
     label: 'minor blues',
     intervals: ['1P', '3m', '4P', '5d', '5P', '7m'],
   },
+  dorian: {
+    label: 'dorian',
+    intervals: ['1P', '2M', '3m', '4P', '5P', '6M', '7m'],
+  },
+  aeolian: {
+    label: 'aeolian',
+    intervals: ['1P', '2M', '3m', '4P', '5P', '6m', '7m'],
+  },
   altered: {
     label: 'altered',
     intervals: ['1P', '2m', '3m', '3M', '5d', '6m', '7m'],
@@ -42,6 +53,10 @@ export const SCALES: Record<ScaleType, ScaleDefinition> = {
   'harmonic-minor': {
     label: 'harmonic minor',
     intervals: ['1P', '2M', '3m', '4P', '5P', '6m', '7M'],
+  },
+  byzantine: {
+    label: 'byzantine',
+    intervals: ['1P', '2m', '3M', '4P', '5P', '6m', '7M'],
   },
   superphrygian: {
     label: 'superphrygian',
