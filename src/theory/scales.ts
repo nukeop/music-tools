@@ -83,14 +83,29 @@ function withoutDoubleAccidental(note: string): string {
   return Note.simplify(note);
 }
 
+const OCTAVE = '8P';
+
+export type ScaleDegree = {
+  interval: string;
+  note: string;
+};
+
+export function scaleDegrees(
+  spelledRoot: string,
+  scaleType: ScaleType,
+): ScaleDegree[] {
+  const intervals = [...SCALES[scaleType].intervals, OCTAVE];
+  return intervals.map((interval) => ({
+    interval,
+    note: withoutDoubleAccidental(Note.transpose(spelledRoot, interval)),
+  }));
+}
+
 export function scaleNotes(
   spelledRoot: string,
   scaleType: ScaleType,
 ): string[] {
-  const definition = SCALES[scaleType];
-  return definition.intervals.map((interval) =>
-    withoutDoubleAccidental(Note.transpose(spelledRoot, interval)),
-  );
+  return scaleDegrees(spelledRoot, scaleType).map((degree) => degree.note);
 }
 
 export function scaleName(root: string, scale: ScaleType): string {

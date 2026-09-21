@@ -11,7 +11,14 @@ describe('Scales', () => {
     await ScalesWrapper.addScale('Major pentatonic');
 
     expect(ScalesWrapper.row(0).name()).toBe('C major pentatonic');
-    expect(ScalesWrapper.row(0).tones()).toEqual(['C', 'D', 'E', 'G', 'A']);
+    expect(ScalesWrapper.row(0).tones()).toEqual([
+      'C',
+      'D',
+      'E',
+      'G',
+      'A',
+      'C',
+    ]);
   });
 
   it('adds Eb minor blues with flat spelling and no double flats', async () => {
@@ -27,6 +34,7 @@ describe('Scales', () => {
       'A',
       'B♭',
       'D♭',
+      'E♭',
     ]);
   });
 
@@ -44,6 +52,7 @@ describe('Scales', () => {
       'A',
       'B',
       'C',
+      'D',
     ]);
   });
 
@@ -60,6 +69,7 @@ describe('Scales', () => {
       'G',
       'A♭',
       'B♭',
+      'C',
     ]);
   });
 
@@ -77,6 +87,7 @@ describe('Scales', () => {
       'E',
       'F',
       'G♯',
+      'A',
     ]);
   });
 
@@ -93,6 +104,7 @@ describe('Scales', () => {
       'G',
       'A♭',
       'B',
+      'C',
     ]);
   });
 
@@ -109,6 +121,7 @@ describe('Scales', () => {
       'B',
       'C',
       'D',
+      'E',
     ]);
   });
 
@@ -125,6 +138,7 @@ describe('Scales', () => {
       'C',
       'D',
       'E♭',
+      'F',
     ]);
   });
 
@@ -141,6 +155,7 @@ describe('Scales', () => {
       'G',
       'A',
       'B♭',
+      'C',
     ]);
   });
 
@@ -158,6 +173,7 @@ describe('Scales', () => {
       'A',
       'B♭',
       'C',
+      'D♭',
     ]);
   });
 
@@ -166,7 +182,14 @@ describe('Scales', () => {
     await ScalesWrapper.rootPicker.select('G♭');
     await ScalesWrapper.addScale('Minor pentatonic');
 
-    expect(ScalesWrapper.row(0).tones()).toEqual(['G♭', 'A', 'C♭', 'D♭', 'F♭']);
+    expect(ScalesWrapper.row(0).tones()).toEqual([
+      'G♭',
+      'A',
+      'C♭',
+      'D♭',
+      'F♭',
+      'G♭',
+    ]);
   });
 
   it('adds F# altered with sharps spelling', async () => {
@@ -184,6 +207,7 @@ describe('Scales', () => {
       'C',
       'D',
       'E',
+      'F♯',
     ]);
   });
 
@@ -200,6 +224,7 @@ describe('Scales', () => {
       'E♯',
       'G♯',
       'A♯',
+      'C♯',
     ]);
   });
 
@@ -239,7 +264,7 @@ describe('Scales', () => {
     await ScalesWrapper.row(0).play();
 
     expect(ScalesWrapper.playedSequences()).toEqual([
-      { notes: ['C4', 'D4', 'E4', 'G4', 'A4'], secondsPerNote: 0.3 },
+      { notes: ['C4', 'D4', 'E4', 'G4', 'A4', 'C5'], secondsPerNote: 0.3 },
     ]);
   });
 
@@ -251,7 +276,7 @@ describe('Scales', () => {
     await ScalesWrapper.row(0).play();
 
     expect(ScalesWrapper.playedSequences()).toEqual([
-      { notes: ['A4', 'C5', 'D5', 'E5', 'G5'], secondsPerNote: 0.3 },
+      { notes: ['A4', 'C5', 'D5', 'E5', 'G5', 'A5'], secondsPerNote: 0.3 },
     ]);
   });
 
@@ -263,7 +288,7 @@ describe('Scales', () => {
     await ScalesWrapper.row(0).play();
 
     expect(ScalesWrapper.playedSequences()).toEqual([
-      { notes: ['Bb3', 'C4', 'D4', 'F4', 'G4'], secondsPerNote: 0.3 },
+      { notes: ['Bb3', 'C4', 'D4', 'F4', 'G4', 'Bb4'], secondsPerNote: 0.3 },
     ]);
   });
 
@@ -276,7 +301,7 @@ describe('Scales', () => {
     await ScalesWrapper.row(1).play();
 
     expect(ScalesWrapper.playedSequences()).toEqual([
-      { notes: ['A4', 'C5', 'D5', 'E5', 'G5'], secondsPerNote: 0.3 },
+      { notes: ['A4', 'C5', 'D5', 'E5', 'G5', 'A5'], secondsPerNote: 0.3 },
     ]);
   });
 

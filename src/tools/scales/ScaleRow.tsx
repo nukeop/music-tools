@@ -4,7 +4,7 @@ import { Icon } from '@iconify/react/dist/offline';
 import play from '@iconify-icons/lucide/play';
 import x from '@iconify-icons/lucide/x';
 import { Button } from '../../components/Button';
-import { type ScaleType, scaleName, scaleNotes } from '../../theory/scales';
+import { type ScaleType, scaleDegrees, scaleName } from '../../theory/scales';
 import { DragHandle } from './DragHandle';
 import { ScaleTone } from './ScaleTone';
 
@@ -44,7 +44,7 @@ export function ScaleRow({
     isDragging,
   } = useSortable({ id });
 
-  const notes = scaleNotes(root, scale);
+  const degrees = scaleDegrees(root, scale);
   const name = scaleName(root, scale);
 
   const style = {
@@ -71,11 +71,11 @@ export function ScaleRow({
         {name}
       </span>
       <div className="flex flex-1 gap-1">
-        {notes.map((note, index) => (
+        {degrees.map((degree, index) => (
           <ScaleTone
-            key={note}
-            note={note}
-            isRoot={note === root}
+            key={degree.interval}
+            note={degree.note}
+            isRoot={degree.note === root}
             isActive={activeToneIndex === index}
           />
         ))}
