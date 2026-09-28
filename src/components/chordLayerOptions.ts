@@ -1,4 +1,3 @@
-import type { ChoiceOption } from '../../components/ChoiceGroup';
 import {
   type ChordLayer,
   EXTENSIONS,
@@ -7,7 +6,8 @@ import {
   type Seventh,
   TRIADS,
   type Triad,
-} from '../../theory/chords';
+} from '../theory/chords';
+import type { ChoiceOption } from './ChoiceGroup';
 
 function optionsFrom<T extends string>(
   table: Record<T, ChordLayer>,

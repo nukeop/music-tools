@@ -42,9 +42,30 @@ export const ProgressionsWrapper = {
     await selectOption('Chords per bar', String(chordsPerBar));
   },
 
-  async setChord(number: number, root: string, quality: string) {
-    await selectOption(`Chord ${number} root`, root);
-    await selectOption(`Chord ${number} quality`, quality);
+  async selectChord(number: number) {
+    await user.click(screen.getByRole('button', { name: `Chord ${number}` }));
+  },
+
+  editedChord() {
+    const chips = screen.getByRole('group', { name: 'Progression chords' });
+    const pressed = within(chips).getByRole('button', { pressed: true });
+    return ariaLabelOf(pressed);
+  },
+
+  get rootPicker() {
+    return group('Root note', textContentOf);
+  },
+
+  get triadPicker() {
+    return group('Triad', textContentOf);
+  },
+
+  get seventhPicker() {
+    return group('Seventh', textContentOf);
+  },
+
+  get extensionPicker() {
+    return group('Extension', textContentOf);
   },
 
   chordNames() {
@@ -67,6 +88,10 @@ export const ProgressionsWrapper = {
     const input = screen.getByRole('spinbutton', { name: 'Tempo' });
     await user.clear(input);
     await user.type(input, `${tempo}{Enter}`);
+  },
+
+  previewedChord() {
+    return fakeInstrument.playedChords.at(-1);
   },
 
   playedProgressions() {
