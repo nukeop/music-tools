@@ -1,10 +1,8 @@
 import { Icon } from '@iconify/react/dist/offline';
 import play from '@iconify-icons/lucide/play';
 import square from '@iconify-icons/lucide/square';
-import { AccidentalSwitch } from '../../components/AccidentalSwitch';
 import { Button } from '../../components/Button';
 import { Select } from '../../components/Select';
-import type { Accidental } from '../../theory/chords';
 import {
   CHORDS_PER_BAR_CHOICES,
   countOptions,
@@ -16,12 +14,10 @@ type ProgressionSettingsProps = {
   chordCount: number;
   bars: number;
   chordsPerBar: number;
-  accidental: Accidental;
   playing: boolean;
   onChordCountChange: (count: number) => void;
   onBarsChange: (bars: number) => void;
   onChordsPerBarChange: (chordsPerBar: number) => void;
-  onAccidentalChange: (accidental: Accidental) => void;
   onPlay: () => void;
   onStop: () => void;
 };
@@ -94,17 +90,15 @@ export function ProgressionSettings({
   chordCount,
   bars,
   chordsPerBar,
-  accidental,
   playing,
   onChordCountChange,
   onBarsChange,
   onChordsPerBarChange,
-  onAccidentalChange,
   onPlay,
   onStop,
 }: ProgressionSettingsProps) {
   return (
-    <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+    <div className="flex items-end gap-1.5 sm:gap-3">
       <div className="flex flex-1 gap-1.5">
         <LabeledSelect
           label="Chords"
@@ -125,12 +119,7 @@ export function ProgressionSettings({
           onChange={onChordsPerBarChange}
         />
       </div>
-      <div className="flex justify-end gap-1.5">
-        <AccidentalSwitch
-          selected={accidental}
-          onSelect={onAccidentalChange}
-          className="h-9"
-        />
+      <div className="flex justify-end">
         <PlayStopButton playing={playing} onPlay={onPlay} onStop={onStop} />
       </div>
     </div>
