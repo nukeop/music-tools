@@ -1,39 +1,43 @@
+import { Button } from '../../components/Button';
 import type { ChordLabel } from './chordLabel';
+import type { SlotPosition } from './useProgression';
 
 type TimelineProps = {
-  slotLabels: ChordLabel[];
-  chordsPerBar: number;
+  bars: ChordLabel[][];
+  edited: SlotPosition;
   activeSlot: number | null;
+  onSelect: (position: SlotPosition) => void;
 };
 
-const SLOT_BASE =
-  'flex h-12 flex-1 flex-col items-center justify-center gap-0.5 rounded-md px-1';
-
-function slotClassName(isActive: boolean): string {
-  if (isActive) {
-    return `${SLOT_BASE} bg-accent text-accent-fg ring-3 ring-accent/50`;
+// Busier bars get wider columns so every chord name stays readable.
+function gridClassName(chordsPerBar: number): string {
+  if (chordsPerBar >= 3) {
+    return 'grid-cols-1 sm:grid-cols-2';
   }
-  return `${SLOT_BASE} bg-overlay/40 text-panel-fg`;
+  return 'grid-cols-2 sm:grid-cols-4';
 }
 
-function chunk<T>(items: T[], size: number): T[][] {
-  return Array.from({ length: Math.ceil(items.length / size) }, (_c, index) =>
-    items.slice(index * size, (index + 1) * size),
-  );
+const SLOT_CLASS_NAME = 'h-14 min-w-0 flex-1 flex-col gap-0.5 px-1';
+const PLAYING_CLASS_NAME = 'ring-3 ring-positive';
+
+function slotClassName(isPlaying: boolean): string {
+  if (isPlaying) {
+    return `${SLOT_CLASS_NAME} ${PLAYING_CLASS_NAME}`;
+  }
+  return SLOT_CLASS_NAME;
 }
 
 export function Timeline({
-  slotLabels,
-  chordsPerBar,
+  bars,
+  edited,
   activeSlot,
+  onSelect,
 }: TimelineProps) {
-  const bars = chunk(
-    slotLabels.map((label, slot) => ({ ...label, slot })),
-    chordsPerBar,
-  );
-
   return (
-    <div className="grid grid-cols-2 gap-2 rounded-xl bg-panel p-2 sm:grid-cols-4 sm:p-3">
+    <fieldset
+      aria-label="Progression chords"
+      className={`m-0 grid gap-2 border-0 p-0 ${gridClassName(bars[0].length)}`}
+    >
       {bars.map((bar, barIndex) => (
         <div
           // Bars are positional and never reorder.
@@ -46,27 +50,41 @@ export function Timeline({
             {barIndex + 1}
           </span>
           <div className="flex gap-1">
-            {bar.map(({ numeral, name, slot }) => (
-              <span
-                key={slot}
-                data-testid="timeline-slot"
-                aria-current={slot === activeSlot ? 'true' : undefined}
-                className={slotClassName(slot === activeSlot)}
-              >
-                <span
-                  data-testid="timeline-numeral"
-                  className="text-sm leading-none font-bold sm:text-base"
+            {bar.map(({ numeral, name }, chordIndex) => {
+              const slot = barIndex * bar.length + chordIndex;
+              const isPlaying = slot === activeSlot;
+              return (
+                <Button
+                  // Slots are positional and never reorder.
+                  // biome-ignore lint/suspicious/noArrayIndexKey: see above
+                  key={chordIndex}
+                  variant="accent"
+                  pressed={
+                    barIndex === edited.bar && chordIndex === edited.chord
+                  }
+                  aria-label={`Bar ${barIndex + 1} chord ${chordIndex + 1}`}
+                  aria-current={isPlaying ? 'true' : undefined}
+                  onClick={() => onSelect({ bar: barIndex, chord: chordIndex })}
+                  className={slotClassName(isPlaying)}
                 >
-                  {numeral}
-                </span>
-                <span className="text-[0.65rem] font-medium opacity-70">
-                  {name}
-                </span>
-              </span>
-            ))}
+                  <span
+                    data-testid="timeline-numeral"
+                    className="max-w-full truncate text-sm leading-none sm:text-base"
+                  >
+                    {numeral}
+                  </span>
+                  <span
+                    data-testid="timeline-name"
+                    className="max-w-full truncate text-[0.65rem] font-medium opacity-70"
+                  >
+                    {name}
+                  </span>
+                </Button>
+              );
+            })}
           </div>
         </div>
       ))}
-    </div>
+    </fieldset>
   );
 }

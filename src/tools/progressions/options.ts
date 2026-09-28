@@ -1,9 +1,8 @@
 import type { ChordSelection, Seventh, Triad } from '../../theory/chords';
 import type { ProgressionChord } from '../../theory/progressions';
 
-export const MAX_CHORDS = 8;
 export const MAX_BARS = 16;
-export const CHORDS_PER_BAR_CHOICES = [1, 2, 3, 4];
+export const MAX_CHORDS_PER_BAR = 4;
 
 function chord(
   degree: string,
@@ -14,7 +13,7 @@ function chord(
   return { degree, selection };
 }
 
-// A I-vi-ii-V turnaround, then plain I chords for any extra slots.
+// A I-vi-ii-V turnaround, one chord per bar, repeating every four bars.
 const TURNAROUND: ProgressionChord[] = [
   chord('1P', 'major', 'maj7'),
   chord('6M', 'minor', '7'),
@@ -22,9 +21,14 @@ const TURNAROUND: ProgressionChord[] = [
   chord('5P', 'major', '7'),
 ];
 
-export const DEFAULT_CHORDS: ProgressionChord[] = Array.from(
-  { length: MAX_CHORDS },
-  (_chord, index) => TURNAROUND[index] ?? chord('1P', 'major', null),
+// Every slot of every bar starts as that bar's turnaround chord.
+export const DEFAULT_BARS: ProgressionChord[][] = Array.from(
+  { length: MAX_BARS },
+  (_bar, barIndex) =>
+    Array.from(
+      { length: MAX_CHORDS_PER_BAR },
+      () => TURNAROUND[barIndex % TURNAROUND.length],
+    ),
 );
 
 export function countOptions(max: number) {
