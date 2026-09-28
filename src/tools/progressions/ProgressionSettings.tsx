@@ -3,31 +3,20 @@ import play from '@iconify-icons/lucide/play';
 import square from '@iconify-icons/lucide/square';
 import { Button } from '../../components/Button';
 import { Select } from '../../components/Select';
-import {
-  CHORDS_PER_BAR_CHOICES,
-  countOptions,
-  MAX_BARS,
-  MAX_CHORDS,
-} from './options';
+import { countOptions, MAX_BARS, MAX_CHORDS_PER_BAR } from './options';
 
 type ProgressionSettingsProps = {
-  chordCount: number;
   bars: number;
   chordsPerBar: number;
   playing: boolean;
-  onChordCountChange: (count: number) => void;
   onBarsChange: (bars: number) => void;
   onChordsPerBarChange: (chordsPerBar: number) => void;
   onPlay: () => void;
   onStop: () => void;
 };
 
-const CHORD_COUNT_OPTIONS = countOptions(MAX_CHORDS);
 const BAR_OPTIONS = countOptions(MAX_BARS);
-const CHORDS_PER_BAR_OPTIONS = CHORDS_PER_BAR_CHOICES.map((choice) => ({
-  value: String(choice),
-  label: String(choice),
-}));
+const CHORDS_PER_BAR_OPTIONS = countOptions(MAX_CHORDS_PER_BAR);
 
 type LabeledSelectProps = {
   label: string;
@@ -87,11 +76,9 @@ function PlayStopButton({
 }
 
 export function ProgressionSettings({
-  chordCount,
   bars,
   chordsPerBar,
   playing,
-  onChordCountChange,
   onBarsChange,
   onChordsPerBarChange,
   onPlay,
@@ -100,12 +87,6 @@ export function ProgressionSettings({
   return (
     <div className="flex items-end gap-1.5 sm:gap-3">
       <div className="flex flex-1 gap-1.5">
-        <LabeledSelect
-          label="Chords"
-          options={CHORD_COUNT_OPTIONS}
-          selected={chordCount}
-          onChange={onChordCountChange}
-        />
         <LabeledSelect
           label="Bars"
           options={BAR_OPTIONS}

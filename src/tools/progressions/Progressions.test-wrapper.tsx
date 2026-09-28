@@ -30,10 +30,6 @@ export const ProgressionsWrapper = {
     return group('Instrument key', ariaLabelOf);
   },
 
-  async setChordCount(count: number) {
-    await selectOption('Chords', String(count));
-  },
-
   async setBars(bars: number) {
     await selectOption('Bars', String(bars));
   },
@@ -42,11 +38,13 @@ export const ProgressionsWrapper = {
     await selectOption('Chords per bar', String(chordsPerBar));
   },
 
-  async selectChord(number: number) {
-    await user.click(screen.getByRole('button', { name: `Chord ${number}` }));
+  async selectSlot(bar: number, chord: number) {
+    await user.click(
+      screen.getByRole('button', { name: `Bar ${bar} chord ${chord}` }),
+    );
   },
 
-  editedChord() {
+  editedSlot() {
     const chips = screen.getByRole('group', { name: 'Progression chords' });
     const pressed = within(chips).getByRole('button', { pressed: true });
     return ariaLabelOf(pressed);
@@ -73,13 +71,11 @@ export const ProgressionsWrapper = {
   },
 
   numerals() {
-    return screen
-      .getAllByTestId('progression-chord-numeral')
-      .map(textContentOf);
+    return screen.getAllByTestId('timeline-numeral').map(textContentOf);
   },
 
   chordNames() {
-    return screen.getAllByTestId('progression-chord-name').map(textContentOf);
+    return screen.getAllByTestId('timeline-name').map(textContentOf);
   },
 
   timeline() {

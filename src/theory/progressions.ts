@@ -83,15 +83,3 @@ export function progressionChordPitches(
     Note.transpose(root, interval),
   );
 }
-
-// Fills bars × chordsPerBar slots by cycling through the chords in order.
-export function progressionSlots(
-  chordCount: number,
-  bars: number,
-  chordsPerBar: number,
-): number[] {
-  return Array.from(
-    { length: bars * chordsPerBar },
-    (_slot, index) => index % chordCount,
-  );
-}

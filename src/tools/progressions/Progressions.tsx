@@ -17,15 +17,13 @@ import {
   degreeRoot,
   type ProgressionChord,
   progressionChordPitches,
-  progressionSlots,
   romanChordName,
 } from '../../theory/progressions';
-import { ChordChips } from './ChordChips';
 import type { ChordLabel } from './chordLabel';
 import { DegreePicker } from './DegreePicker';
 import { ProgressionSettings } from './ProgressionSettings';
 import { Timeline } from './Timeline';
-import { useProgression } from './useProgression';
+import { type SlotPosition, useProgression } from './useProgression';
 import { useProgressionPlayback } from './useProgressionPlayback';
 
 export function Progressions() {
@@ -37,14 +35,15 @@ export function Progressions() {
   const { activeSlot, playing, play, stop } =
     useProgressionPlayback(instrument);
 
-  const { chords, chordCount, bars, chordsPerBar, editedIndex, editedChord } =
-    progression;
+  const { bars, chordsPerBar, edited, editedChord } = progression;
   const spelledKey = spellTonic(progression.keyTonic, accidental);
-  const labels: ChordLabel[] = chords.map((chord) => ({
-    numeral: romanChordName(chord.degree, chord.selection),
-    name: chordName(degreeRoot(spelledKey, chord.degree), chord.selection),
-  }));
-  const slots = progressionSlots(chordCount, bars, chordsPerBar);
+
+  function label(chord: ProgressionChord): ChordLabel {
+    return {
+      numeral: romanChordName(chord.degree, chord.selection),
+      name: chordName(degreeRoot(spelledKey, chord.degree), chord.selection),
+    };
+  }
 
   function voice(chord: ProgressionChord): string[] {
     const root = degreeRoot(spelledKey, chord.degree);
@@ -61,9 +60,9 @@ export function Progressions() {
     void instrument.playChord(voice(chord));
   }
 
-  function selectChord(index: number) {
-    progression.selectChord(index);
-    preview(chords[index]);
+  function selectSlot(position: SlotPosition) {
+    progression.selectSlot(position);
+    preview(bars[position.bar][position.chord]);
   }
 
   function selectDegree(degree: string) {
@@ -77,8 +76,7 @@ export function Progressions() {
   }
 
   function playProgression() {
-    const voiced = chords.map(voice);
-    const slotChords = slots.map((chordIndex) => voiced[chordIndex]);
+    const slotChords = bars.flat().map(voice);
     void play(slotChords, barSeconds(tempo) / chordsPerBar);
   }
 
@@ -88,12 +86,10 @@ export function Progressions() {
 
       <div className="flex flex-col gap-3 rounded-xl bg-panel p-3 sm:p-4">
         <ProgressionSettings
-          chordCount={chordCount}
-          bars={bars}
+          bars={progression.barCount}
           chordsPerBar={chordsPerBar}
           playing={playing}
-          onChordCountChange={progression.setChordCount}
-          onBarsChange={progression.setBars}
+          onBarsChange={progression.setBarCount}
           onChordsPerBarChange={progression.setChordsPerBar}
           onPlay={playProgression}
           onStop={stop}
@@ -118,10 +114,11 @@ export function Progressions() {
       </div>
 
       <div className="flex flex-col gap-3 rounded-xl bg-panel p-3 sm:p-4">
-        <ChordChips
-          labels={labels}
-          selectedIndex={editedIndex}
-          onSelect={selectChord}
+        <Timeline
+          bars={bars.map((bar) => bar.map(label))}
+          edited={edited}
+          activeSlot={activeSlot}
+          onSelect={selectSlot}
         />
 
         <DegreePicker selected={editedChord.degree} onSelect={selectDegree} />
@@ -131,12 +128,6 @@ export function Progressions() {
           onChange={selectLayers}
         />
       </div>
-
-      <Timeline
-        slotLabels={slots.map((chordIndex) => labels[chordIndex])}
-        chordsPerBar={chordsPerBar}
-        activeSlot={activeSlot}
-      />
     </div>
   );
 }
