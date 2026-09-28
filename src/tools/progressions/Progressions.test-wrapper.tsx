@@ -52,8 +52,12 @@ export const ProgressionsWrapper = {
     return ariaLabelOf(pressed);
   },
 
-  get rootPicker() {
-    return group('Root note', textContentOf);
+  get keyPicker() {
+    return group('Key', textContentOf);
+  },
+
+  get degreePicker() {
+    return group('Degree', textContentOf);
   },
 
   get triadPicker() {
@@ -68,6 +72,12 @@ export const ProgressionsWrapper = {
     return group('Extension', textContentOf);
   },
 
+  numerals() {
+    return screen
+      .getAllByTestId('progression-chord-numeral')
+      .map(textContentOf);
+  },
+
   chordNames() {
     return screen.getAllByTestId('progression-chord-name').map(textContentOf);
   },
@@ -76,7 +86,7 @@ export const ProgressionsWrapper = {
     return screen
       .getAllByTestId('timeline-bar')
       .map((bar) =>
-        within(bar).getAllByTestId('timeline-slot').map(textContentOf),
+        within(bar).getAllByTestId('timeline-numeral').map(textContentOf),
       );
   },
 

@@ -14,11 +14,15 @@ import {
   spellTonic,
 } from '../../theory/chords';
 import {
+  degreeRoot,
   type ProgressionChord,
   progressionChordPitches,
   progressionSlots,
+  romanChordName,
 } from '../../theory/progressions';
 import { ChordChips } from './ChordChips';
+import type { ChordLabel } from './chordLabel';
+import { DegreePicker } from './DegreePicker';
 import { ProgressionSettings } from './ProgressionSettings';
 import { Timeline } from './Timeline';
 import { useProgression } from './useProgression';
@@ -35,19 +39,17 @@ export function Progressions() {
 
   const { chords, chordCount, bars, chordsPerBar, editedIndex, editedChord } =
     progression;
-  const spelled = chords.map((chord) => ({
-    tonic: spellTonic(chord.tonic, accidental),
-    selection: chord.selection,
+  const spelledKey = spellTonic(progression.keyTonic, accidental);
+  const labels: ChordLabel[] = chords.map((chord) => ({
+    numeral: romanChordName(chord.degree, chord.selection),
+    name: chordName(degreeRoot(spelledKey, chord.degree), chord.selection),
   }));
-  const names = spelled.map(({ tonic, selection }) =>
-    chordName(tonic, selection),
-  );
   const slots = progressionSlots(chordCount, bars, chordsPerBar);
 
   function voice(chord: ProgressionChord): string[] {
-    const tonic = spellTonic(chord.tonic, accidental);
+    const root = degreeRoot(spelledKey, chord.degree);
     return toConcertPitch(
-      progressionChordPitches(tonic, chord.selection),
+      progressionChordPitches(root, chord.selection),
       instrumentKey,
     );
   }
@@ -64,9 +66,9 @@ export function Progressions() {
     preview(chords[index]);
   }
 
-  function selectTonic(tonic: string) {
-    progression.setTonic(tonic);
-    preview({ ...editedChord, tonic });
+  function selectDegree(degree: string) {
+    progression.setDegree(degree);
+    preview({ ...editedChord, degree });
   }
 
   function selectLayers(selection: ChordSelection) {
@@ -84,7 +86,7 @@ export function Progressions() {
     <div className="mx-auto flex max-w-3xl flex-col gap-4 p-4 sm:p-6">
       <h1 className="sr-only">Chord progressions</h1>
 
-      <div className="rounded-xl bg-panel p-3 sm:p-4">
+      <div className="flex flex-col gap-3 rounded-xl bg-panel p-3 sm:p-4">
         <ProgressionSettings
           chordCount={chordCount}
           bars={bars}
@@ -96,27 +98,33 @@ export function Progressions() {
           onPlay={playProgression}
           onStop={stop}
         />
+
+        <div className="flex flex-col gap-1">
+          <span className="text-xs font-semibold text-panel-fg-muted">Key</span>
+          <div className="flex gap-1.5">
+            <RootPicker
+              groupLabel="Key"
+              selected={progression.keyTonic}
+              accidental={accidental}
+              onSelect={progression.setKeyTonic}
+            />
+            <AccidentalSwitch
+              selected={accidental}
+              onSelect={setAccidental}
+              className="flex-col sm:flex-row"
+            />
+          </div>
+        </div>
       </div>
 
       <div className="flex flex-col gap-3 rounded-xl bg-panel p-3 sm:p-4">
         <ChordChips
-          names={names}
+          labels={labels}
           selectedIndex={editedIndex}
           onSelect={selectChord}
         />
 
-        <div className="flex gap-1.5">
-          <RootPicker
-            selected={editedChord.tonic}
-            accidental={accidental}
-            onSelect={selectTonic}
-          />
-          <AccidentalSwitch
-            selected={accidental}
-            onSelect={setAccidental}
-            className="flex-col sm:flex-row"
-          />
-        </div>
+        <DegreePicker selected={editedChord.degree} onSelect={selectDegree} />
 
         <ChordLayerPicker
           selection={editedChord.selection}
@@ -125,7 +133,7 @@ export function Progressions() {
       </div>
 
       <Timeline
-        slotNames={slots.map((chordIndex) => names[chordIndex])}
+        slotLabels={slots.map((chordIndex) => labels[chordIndex])}
         chordsPerBar={chordsPerBar}
         activeSlot={activeSlot}
       />

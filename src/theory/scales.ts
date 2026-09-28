@@ -76,7 +76,7 @@ export const SCALES: Record<ScaleType, ScaleDefinition> = {
   },
 };
 
-function withoutDoubleAccidental(note: string): string {
+export function withoutDoubleAccidental(note: string): string {
   if (Math.abs(Note.get(note).alt) < 2) {
     return note;
   }

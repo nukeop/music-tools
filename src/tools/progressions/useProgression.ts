@@ -7,6 +7,7 @@ export function useProgression() {
   const [chordCount, setChordCount] = useState(4);
   const [bars, setBars] = useState(4);
   const [chordsPerBar, setChordsPerBar] = useState(1);
+  const [keyTonic, setKeyTonic] = useState('C');
   const [selectedIndex, setSelectedIndex] = useState(0);
   // Holds MAX_CHORDS entries so shrinking and regrowing the count keeps edits.
   const [allChords, setAllChords] = useState(DEFAULT_CHORDS);
@@ -25,8 +26,8 @@ export function useProgression() {
     );
   }
 
-  function setTonic(tonic: string) {
-    updateEditedChord({ tonic });
+  function setDegree(degree: string) {
+    updateEditedChord({ degree });
   }
 
   function setSelection(selection: ChordSelection) {
@@ -35,16 +36,18 @@ export function useProgression() {
 
   return {
     chords,
+    keyTonic,
     chordCount,
     bars,
     chordsPerBar,
     editedIndex,
     editedChord: chords[editedIndex],
+    setKeyTonic,
     setChordCount,
     setBars,
     setChordsPerBar,
     selectChord: setSelectedIndex,
-    setTonic,
+    setDegree,
     setSelection,
   };
 }
