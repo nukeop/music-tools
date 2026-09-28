@@ -5,4 +5,10 @@ export type Instrument = {
     secondsPerNote: number,
     onNoteStart: (index: number) => void,
   ): Promise<void>;
+  playProgression(
+    chords: string[][],
+    secondsPerChord: number,
+    onChordStart: (index: number) => void,
+  ): Promise<void>;
+  stop(): void;
 };
