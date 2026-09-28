@@ -1,11 +1,13 @@
+import type { ChordLabel } from './chordLabel';
+
 type TimelineProps = {
-  slotNames: string[];
+  slotLabels: ChordLabel[];
   chordsPerBar: number;
   activeSlot: number | null;
 };
 
 const SLOT_BASE =
-  'flex h-12 flex-1 items-center justify-center rounded-md px-1 text-sm font-bold sm:text-base';
+  'flex h-12 flex-1 flex-col items-center justify-center gap-0.5 rounded-md px-1';
 
 function slotClassName(isActive: boolean): string {
   if (isActive) {
@@ -21,12 +23,12 @@ function chunk<T>(items: T[], size: number): T[][] {
 }
 
 export function Timeline({
-  slotNames,
+  slotLabels,
   chordsPerBar,
   activeSlot,
 }: TimelineProps) {
   const bars = chunk(
-    slotNames.map((name, slot) => ({ name, slot })),
+    slotLabels.map((label, slot) => ({ ...label, slot })),
     chordsPerBar,
   );
 
@@ -44,14 +46,22 @@ export function Timeline({
             {barIndex + 1}
           </span>
           <div className="flex gap-1">
-            {bar.map(({ name, slot }) => (
+            {bar.map(({ numeral, name, slot }) => (
               <span
                 key={slot}
                 data-testid="timeline-slot"
                 aria-current={slot === activeSlot ? 'true' : undefined}
                 className={slotClassName(slot === activeSlot)}
               >
-                {name}
+                <span
+                  data-testid="timeline-numeral"
+                  className="text-sm leading-none font-bold sm:text-base"
+                >
+                  {numeral}
+                </span>
+                <span className="text-[0.65rem] font-medium opacity-70">
+                  {name}
+                </span>
               </span>
             ))}
           </div>

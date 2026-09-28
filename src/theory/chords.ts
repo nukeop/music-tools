@@ -134,6 +134,13 @@ function extensionPart(
   return `(${EXTENSIONS[extension].label})`;
 }
 
+export function chordSuffix(selection: ChordSelection): string {
+  const base =
+    BASE_SYMBOLS[selection.triad ?? 'major'][selection.seventh ?? 'none'];
+  const extension = extensionPart(selection.seventh, selection.extension);
+  return `${base}${extension}`;
+}
+
 export function chordName(
   spelledTonic: string | null,
   selection: ChordSelection,
@@ -141,11 +148,7 @@ export function chordName(
   if (spelledTonic === null) {
     return '';
   }
-  const root = formatNote(spelledTonic);
-  const base =
-    BASE_SYMBOLS[selection.triad ?? 'major'][selection.seventh ?? 'none'];
-  const extension = extensionPart(selection.seventh, selection.extension);
-  return `${root}${base}${extension}`;
+  return `${formatNote(spelledTonic)}${chordSuffix(selection)}`;
 }
 
 export function spellTonic(tonic: string, accidental: Accidental): string;

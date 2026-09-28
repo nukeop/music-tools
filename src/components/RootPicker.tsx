@@ -10,12 +10,14 @@ type RootPickerProps = {
   selected: string | null;
   accidental: Accidental;
   onSelect: (tonic: string) => void;
+  groupLabel?: string;
 };
 
 export function RootPicker({
   selected,
   accidental,
   onSelect,
+  groupLabel = 'Root note',
 }: RootPickerProps) {
   const options = TONICS.map((tonic) => ({
     value: tonic,
@@ -24,7 +26,7 @@ export function RootPicker({
 
   return (
     <ChoiceGroup
-      groupLabel="Root note"
+      groupLabel={groupLabel}
       options={options}
       selected={selected}
       onChange={onSelect}

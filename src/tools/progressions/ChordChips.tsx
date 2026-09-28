@@ -1,13 +1,14 @@
 import { Button } from '../../components/Button';
+import type { ChordLabel } from './chordLabel';
 
 type ChordChipsProps = {
-  names: string[];
+  labels: ChordLabel[];
   selectedIndex: number;
   onSelect: (index: number) => void;
 };
 
 export function ChordChips({
-  names,
+  labels,
   selectedIndex,
   onSelect,
 }: ChordChipsProps) {
@@ -16,7 +17,7 @@ export function ChordChips({
       aria-label="Progression chords"
       className="m-0 grid grid-cols-4 gap-1.5 border-0 p-0 sm:grid-cols-8"
     >
-      {names.map((name, index) => (
+      {labels.map(({ numeral, name }, index) => (
         <Button
           // Chords are positional slots, not reorderable items.
           // biome-ignore lint/suspicious/noArrayIndexKey: see above
@@ -27,12 +28,15 @@ export function ChordChips({
           onClick={() => onSelect(index)}
           className="h-12 flex-col gap-0.5 px-1"
         >
-          <span className="text-[0.65rem] font-medium opacity-70">
-            {index + 1}
+          <span
+            data-testid="progression-chord-numeral"
+            className="text-sm leading-none sm:text-base"
+          >
+            {numeral}
           </span>
           <span
             data-testid="progression-chord-name"
-            className="text-sm leading-none sm:text-base"
+            className="text-[0.65rem] font-medium opacity-70"
           >
             {name}
           </span>
