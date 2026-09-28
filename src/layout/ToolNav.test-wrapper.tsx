@@ -9,6 +9,8 @@ function createFakeInstrument(): Instrument {
   return {
     async playChord() {},
     async playSequence() {},
+    async playProgression() {},
+    stop() {},
   };
 }
 

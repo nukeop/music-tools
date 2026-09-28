@@ -29,3 +29,10 @@ export function readInitialTempo(): number {
 export function persistTempo(tempo: number) {
   localStorage.setItem(storageKey, String(tempo));
 }
+
+export const BEATS_PER_BAR = 4;
+
+export function barSeconds(tempo: number): number {
+  const beatSeconds = 60 / tempo;
+  return beatSeconds * BEATS_PER_BAR;
+}
